@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\TestMail;
+use App\Http\Controllers\TaskStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +16,12 @@ use App\Mail\TestMail;
 */
 
 Route::get('/', function () {
-    //Mail::to('positronx@gmail.com')->send(new TestMail());
     return view('welcome');
 });
+
+Route::view('/tasks', 'tasks.index');
+
+Route::resource('task_statuses', TaskStatusController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

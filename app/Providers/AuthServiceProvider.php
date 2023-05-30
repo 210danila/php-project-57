@@ -4,6 +4,9 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\TaskStatus;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,19 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
+
+        Gate::define('create-status', function (User $user, TaskStatus $taskStatus) {
+            return true;
+        });
+
+        Gate::define('update-status', function (User $user, TaskStatus $taskStatus) {
+            dump($user);
+            return true;
+        });
+
+        Gate::define('delete-status', function (User $user, TaskStatus $taskStatus) {
+            return true;
+        });
     }
 }

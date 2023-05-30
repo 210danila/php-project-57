@@ -43,7 +43,6 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-        flash('New user registered')->success();
 
         Auth::login($user);
 
