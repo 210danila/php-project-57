@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +20,12 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        DB::table('task_statuses')->insert([
+            ['name' => 'новый', 'created_at' => Carbon::now()],
+            ['name' => 'в работе', 'created_at' => Carbon::now()],
+            ['name' => 'на тестировании', 'created_at' => Carbon::now()],
+            ['name' => 'завершен', 'created_at' => Carbon::now()]
+        ]);
     }
 }

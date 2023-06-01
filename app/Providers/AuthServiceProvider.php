@@ -26,16 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('create-status', function (User $user, TaskStatus $taskStatus) {
-            return true;
-        });
-
-        Gate::define('update-status', function (User $user, TaskStatus $taskStatus) {
-            dump($user);
-            return true;
-        });
-
-        Gate::define('delete-status', function (User $user, TaskStatus $taskStatus) {
+        Gate::define('status', function (User $user) {
             return true;
         });
     }

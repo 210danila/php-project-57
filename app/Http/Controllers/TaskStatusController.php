@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\{Gate, Log};
+use Illuminate\Support\Facades\{Gate, Log, App};
 
 class TaskStatusController extends Controller
 {
@@ -23,6 +23,7 @@ class TaskStatusController extends Controller
      */
     public function create()
     {
+        Gate::authorize('status');
         $task_status = new TaskStatus();
         return view('statuses.create', compact('task_status'));
     }
@@ -32,13 +33,14 @@ class TaskStatusController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info(isset($request->user) ? $request->user->id : 'no user');
+        Gate::authorize('status');
         $data = $this->validate($request, [
             'name' => 'required|unique:task_statuses'
         ]);
 
         $status = new TaskStatus($data);
         $status->save();
+        flash(__('flash.status_created'))->success();
 
         return redirect()->route('task_statuses.index');
     }
@@ -55,6 +57,7 @@ class TaskStatusController extends Controller
      */
     public function edit(TaskStatus $task_status)
     {
+        Gate::authorize('status');
         return view('statuses.edit', compact('task_status'));
     }
 
@@ -63,9 +66,7 @@ class TaskStatusController extends Controller
      */
     public function update(Request $request, TaskStatus $task_status)
     {
-        // if (Gate::denies('update-status', $task_status)) {
-        //     return redirect()->route('login');
-        // }
+        Gate::authorize('status');
         $data = $this->validate($request, [
             'name' => [
                 'required',
@@ -75,6 +76,7 @@ class TaskStatusController extends Controller
 
         $task_status->fill($data);
         $task_status->save();
+        flash(__('flash.status_edited'))->success();
 
         return redirect()->route('task_statuses.index');
     }
@@ -84,9 +86,10 @@ class TaskStatusController extends Controller
      */
     public function destroy(Request $request, TaskStatus $task_status)
     {
-        Log::debug('del');
+        Gate::authorize('status');
         if ($task_status) {
             $task_status->delete();
+            flash(__('flash.status_deleted'))->success();
         }
         return redirect()->route('task_statuses.index');
     }

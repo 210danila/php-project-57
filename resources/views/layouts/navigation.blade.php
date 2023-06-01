@@ -5,12 +5,19 @@
         </a>
 
         <div class="flex items-center lg:order-2">
-            <a href="/login" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Вход
-            </a>
-            <a href="/register" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
-                Регистрация
-            </a>
+            @if (is_null(Auth::user()))
+                <a href="{{ route('login') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Вход
+                </a>
+                <a href="{{ route('register') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
+                    Регистрация
+                </a>
+            @else
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    {{ Form::submit('Выход', ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded']) }}
+                </form>
+            @endif
         </div>
 
         <div class="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1">
