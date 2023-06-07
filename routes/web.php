@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TasksController;
 use Illuminate\Support\Facades\{Route, Log};
-use App\Http\Controllers\TaskStatusController;
+use App\Http\Controllers\{TaskStatusController, TaskController};
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +20,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('/tasks', 'tasks.index');
-
 Route::resource('task_statuses', TaskStatusController::class);
+
+Route::resource('tasks', TaskController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -33,4 +34,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

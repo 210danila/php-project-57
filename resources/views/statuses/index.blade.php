@@ -32,7 +32,7 @@
                     <td>{{ $task_status->created_at }}</td>
                     @can('status')
                         <td>
-                            <a data-method="delete" data-confirm="Вы уверены?" data-remote="true" data-type="json" rel="nofollow" class="text-red-600 hover:text-red-900" href="{{ route('task_statuses.destroy', ['task_status' => $task_status]) }}">
+                            <a data-method="delete" data-confirm="Вы уверены?" data-remote="true" rel="nofollow" class="text-red-600 hover:text-red-900" href="{{ route('task_statuses.destroy', ['task_status' => $task_status]) }}">
                                 Удалить
                             </a>
                             <a class="text-blue-600 hover:text-blue-900" href="{{ route('task_statuses.edit', ['task_status' => $task_status]) }}">

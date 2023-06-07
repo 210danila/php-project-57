@@ -4,9 +4,9 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use App\Models\TaskStatus;
+use App\Models\Task;
 use App\Models\User;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\{Gate};
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -28,6 +28,18 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('status', function (User $user) {
             return true;
+        });
+
+        Gate::define(('store-task'), function (User $user) {
+            return true;
+        });
+
+        Gate::define(('update-task'), function (User $user) {
+            return true;
+        });
+
+        Gate::define(('delete-task'), function (User $user, Task $task) {
+            return $user->id === $task->createdBy->id;
         });
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\{Gate, Log, App};
+use Illuminate\Support\Facades\{Gate, DB};
 
 class TaskStatusController extends Controller
 {
@@ -87,9 +87,14 @@ class TaskStatusController extends Controller
     public function destroy(Request $request, TaskStatus $task_status)
     {
         Gate::authorize('status');
-        if ($task_status) {
+        if (
+            DB::table('task_statuses')->where('id', $task_status->id)->exists() and
+            DB::table('tasks')->where('status_id', $task_status->id)->count() === 0
+        ) {
             $task_status->delete();
             flash(__('flash.status_deleted'))->success();
+        } else {
+            flash(__('flash.status_not_deleted'))->error();
         }
         return redirect()->route('task_statuses.index');
     }

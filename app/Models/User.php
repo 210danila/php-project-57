@@ -14,6 +14,16 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
 
+    public function createdTasks()
+    {
+        return $this->hasMany('App\Models\Tasks', 'created_by_id');
+    }
+
+    public function assignedTasks()
+    {
+        return $this->hasMany('App\Models\Tasks', 'assigned_to_id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

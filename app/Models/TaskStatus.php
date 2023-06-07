@@ -9,5 +9,10 @@ class TaskStatus extends Model
 {
     use HasFactory;
 
+    public function posts()
+    {
+        return $this->hasMany('App\Models\Task', 'status_id');
+    }
+
     protected $fillable = ['name'];
 }
