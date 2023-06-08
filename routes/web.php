@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TasksController;
 use Illuminate\Support\Facades\{Route, Log};
-use App\Http\Controllers\{TaskStatusController, TaskController};
+use App\Http\Controllers\{TaskStatusController, TaskController, LabelController};
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +17,13 @@ use App\Http\Controllers\{TaskStatusController, TaskController};
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('root');
 
 Route::resource('task_statuses', TaskStatusController::class);
 
 Route::resource('tasks', TaskController::class);
+
+Route::resource('labels', LabelController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Task, TaskStatus, User};
+use App\Models\{Task, TaskStatus, User, Label};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Gate, DB};
 
@@ -40,7 +40,8 @@ class TaskController extends Controller
         $task = new Task();
         $statuses = TaskStatus::all()->pluck('name', 'id')->all();
         $users = User::all()->pluck('name', 'id')->all();
-        return view('tasks.create', compact('task', 'statuses', 'users'));
+        $labels = Label::all()->pluck('name', 'id')->all();
+        return view('tasks.create', compact('task', 'statuses', 'users', 'labels'));
     }
 
     /**
@@ -53,12 +54,14 @@ class TaskController extends Controller
             'name' => 'required',
             'description' => 'nullable',
             'status_id' => 'required',
-            'assigned_to_id' => 'nullable'
+            'assigned_to_id' => 'nullable',
+            'labels' => 'nullable|array'
         ]);
         $data['created_by_id'] = Auth::id();
 
         $task = new Task($data);
         $task->save();
+        $task->labels()->attach($data['labels']);
 
         flash(__('flash.task_created'))->success();
         return redirect()->route('tasks.index');
@@ -69,7 +72,8 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return view('tasks.show', compact('task'));
+        $labels = $task->labels;
+        return view('tasks.show', compact('task', 'labels'));
     }
 
     /**
@@ -80,7 +84,9 @@ class TaskController extends Controller
         Gate::authorize('update-task');
         $statuses = TaskStatus::all()->pluck('name', 'id')->all();
         $users = User::all()->pluck('name', 'id')->all();
-        return view('tasks.edit', compact('task', 'statuses', 'users'));
+        $allLabels = Label::all()->pluck('name', 'id')->all();
+        $selectedLabels = collect($task->labels)->pluck('id')->all();
+        return view('tasks.edit', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
 
     /**
@@ -93,11 +99,14 @@ class TaskController extends Controller
             'name' => 'required',
             'description' => 'nullable',
             'status_id' => 'required',
-            'assigned_to_id' => 'nullable'
+            'assigned_to_id' => 'nullable',
+            'labels' => 'nullable|array'
         ]);
 
         $task->fill($data);
         $task->save();
+        $task->labels()->detach();
+        $task->labels()->attach($data['labels']);
 
         flash(__('flash.task_updated'))->success();
         return redirect()->route('tasks.index');

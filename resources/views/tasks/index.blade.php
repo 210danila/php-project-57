@@ -57,7 +57,7 @@
                      </a>
                </td>
                <td>{{ $task->createdBy->name }}</td>
-               <td>{{ $task->assignedTo->name }}</td>
+               <td>{{ $task->assignedTo->name ?? '' }}</td>
                <td>{{ $task->created_at }}</td>
                <td>
                   @can('delete-task', $task)

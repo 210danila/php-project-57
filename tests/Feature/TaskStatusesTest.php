@@ -31,8 +31,7 @@ class TaskStatusesTest extends TestCase
 
     public function test_creating_status_by_guest(): void
     {
-        $response = $this
-            ->post(route('task_statuses.store'), ['name' => "newTestStatus"]);
+        $response = $this->post(route('task_statuses.store'), ['name' => "newTestStatus"]);
 
         $response->assertStatus(403);
         $this->assertDatabaseMissing('task_statuses', ['name' => 'newTestStatus']);
@@ -43,7 +42,7 @@ class TaskStatusesTest extends TestCase
         $testStatus = TaskStatus::factory()->create();
         $response = $this
             ->actingAs($this->actingUser)
-            ->patch(route('task_statuses.update', ['task_status' => $testStatus]), [
+            ->patch(route('task_statuses.update', $testStatus), [
                 'name' => "editedTestStatus"
             ]);
 
@@ -54,10 +53,9 @@ class TaskStatusesTest extends TestCase
     public function test_editing_status_by_guest(): void
     {
         $testStatus = TaskStatus::factory()->create();
-        $response = $this
-            ->patch(route('task_statuses.update', ['task_status' => $testStatus]), [
-                'name' => "editedTestStatus"
-            ]);
+        $response = $this->patch(route('task_statuses.update', $testStatus), [
+            'name' => "editedTestStatus"
+        ]);
 
         $response->assertStatus(403);
         $this->assertDatabaseMissing('task_statuses', ['name' => 'editedTestStatus']);
@@ -68,7 +66,7 @@ class TaskStatusesTest extends TestCase
         $testStatus = TaskStatus::factory()->create();
         $response = $this
             ->actingAs($this->actingUser)
-            ->delete(route('task_statuses.destroy', ['task_status' => $testStatus]));
+            ->delete(route('task_statuses.destroy', $testStatus));
 
         $response->assertRedirect(route('task_statuses.index'));
         $this->assertDatabaseMissing('task_statuses', ['name' => $testStatus->name]);
@@ -77,8 +75,7 @@ class TaskStatusesTest extends TestCase
     public function test_destroying_status_by_guest(): void
     {
         $testStatus = TaskStatus::factory()->create();
-        $response = $this
-            ->delete(route('task_statuses.destroy', ['task_status' => $testStatus]));
+        $response = $this->delete(route('task_statuses.destroy', $testStatus));
 
         $response->assertStatus(403);
         $this->assertDatabaseHas('task_statuses', ['name' => $testStatus->name]);
@@ -90,13 +87,13 @@ class TaskStatusesTest extends TestCase
         $task = new Task([
             'name' => 'testTask',
             'status_id' => $testStatus->id,
-            'created_by_id' => User::factory()->create()->id
+            'created_by_id' => $this->actingUser->id
         ]);
         $task->save();
 
         $response = $this
             ->actingAs($this->actingUser)
-            ->delete(route('task_statuses.destroy', ['task_status' => $testStatus]));
+            ->delete(route('task_statuses.destroy', $testStatus));
 
         $response->assertRedirect(route('task_statuses.index'));
         $this->assertDatabaseHas('task_statuses', ['name' => $testStatus->name]);

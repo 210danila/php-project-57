@@ -4,7 +4,7 @@
 <div class="grid col-span-full">
     <h1 class="mb-5">Создать задачу</h1>
 
-    {{ Form::model($task, ['route' => ['tasks.update', $task], 'method' => 'PATCH'])}}
+    {{ Form::model($task, ['route' => ['tasks.update', $task], 'method' => 'PATCH']) }}
         <div class="flex flex-col">
             @include('tasks.form')
             <div class='mt-2'>
