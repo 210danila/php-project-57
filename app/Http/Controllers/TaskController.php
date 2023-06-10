@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\{Task, TaskStatus, User, Label};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Gate, DB};
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
@@ -27,7 +29,10 @@ class TaskController extends Controller
             ->values()
             ->toArray();
 
-        $tasks = Task::where($filterClauses)->orderBy('id')->paginate(15);
+        #$tasks = Task::where($filterClauses)->orderBy('id')->paginate(15);
+        $tasks = QueryBuilder::for(Task::class)
+            ->allowedFilters('name')
+            ->get();
         return view('tasks.index', compact('statuses', 'users', 'filterQueries', 'tasks'));
     }
 
@@ -40,8 +45,9 @@ class TaskController extends Controller
         $task = new Task();
         $statuses = TaskStatus::all()->pluck('name', 'id')->all();
         $users = User::all()->pluck('name', 'id')->all();
-        $labels = Label::all()->pluck('name', 'id')->all();
-        return view('tasks.create', compact('task', 'statuses', 'users', 'labels'));
+        $allLabels = Label::all()->pluck('name', 'id')->all();
+        $selectedLabels = [];
+        return view('tasks.create', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
 
     /**
