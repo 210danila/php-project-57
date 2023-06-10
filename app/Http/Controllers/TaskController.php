@@ -23,16 +23,13 @@ class TaskController extends Controller
             $tasks = Task::orderBy('id')->paginate(15);
             return view('tasks.index', compact('statuses', 'users', 'filterQueries', 'tasks'));
         }
-        $filterClauses = collect($filterQueries)
-            ->filter(fn($filterValue) => !empty($filterValue))
-            ->map(fn($filterValue, $columnName) => [$columnName, $filterValue])
-            ->values()
-            ->toArray();
-
-        #$tasks = Task::where($filterClauses)->orderBy('id')->paginate(15);
         $tasks = QueryBuilder::for(Task::class)
-            ->allowedFilters('name')
-            ->get();
+            ->allowedFilters([
+                AllowedFilter::exact('status_id'),
+                AllowedFilter::exact('created_by_id'),
+                AllowedFilter::exact('assigned_to_id')
+            ])
+            ->paginate(15);
         return view('tasks.index', compact('statuses', 'users', 'filterQueries', 'tasks'));
     }
 
