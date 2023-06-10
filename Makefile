@@ -10,5 +10,7 @@ lint:
 phpcbf:
 	composer exec --verbose phpcbf -- --standard=PSR12 app routes
 
-routes:
-	php artisan route:list
+db-refresh:
+	php artisan migrate:refresh
+	php artisan db:seed --class=TaskSeeder
+	

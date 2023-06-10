@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
         DB::table('task_statuses')->insert([
             ['name' => 'новый', 'created_at' => Carbon::now()],
             ['name' => 'в работе', 'created_at' => Carbon::now()],
@@ -103,15 +104,6 @@ class DatabaseSeeder extends Seeder
                 'email' => 'me@gmail.com',
                 'password' => Hash::make('11111111')
             ],
-        ]);
-
-        DB::table('tasks')->insert([
-            'name' => 'Исправить ошибку в какой-нибудь строке',
-            'description' => 'Я тут ошибку нашёл, надо бы её исправить и так далее и так далее',
-            'status_id' => 4,
-            'created_by_id' => 5,
-            'assigned_to_id' => 8,
-            'created_at' => Carbon::now()
         ]);
 
         DB::table('labels')->insert([

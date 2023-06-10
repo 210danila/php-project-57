@@ -19,15 +19,13 @@ Route::get('/', function () {
     return view('welcome');
 })->name('root');
 
-Route::resource('task_statuses', TaskStatusController::class);
-
-Route::resource('tasks', TaskController::class);
-
-Route::resource('labels', LabelController::class);
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::resource('task_statuses', TaskStatusController::class);
+    Route::resource('tasks', TaskController::class);
+    Route::resource('labels', LabelController::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
