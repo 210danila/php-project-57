@@ -1,3 +1,6 @@
+make setup:
+	apt-get install -y npm
+
 install:
 	composer install
 
