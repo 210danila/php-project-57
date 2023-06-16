@@ -15,4 +15,7 @@ refresh:
 	php artisan db:seed --class=TaskStatusSeeder
 
 test:
-	php artisan make:test --	
+	php artisan test
+
+test-coverage:
+	composer exec --verbose phpunit tests -- --coverage-clover storage/logs/clover.xml	
