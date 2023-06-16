@@ -14,7 +14,8 @@ refresh:
 	php artisan migrate:refresh
 	php artisan db:seed --class=TaskStatusSeeder
 
-test:
+.PHONY: tests
+tests:
 	php artisan test
 
 test-coverage:

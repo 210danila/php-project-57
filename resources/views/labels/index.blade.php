@@ -31,9 +31,11 @@
                     <td>{{ $label->created_at->format('d.m.Y') }}</td>
                     <td>
                         @can('label')
-                            <a data-confirm="Вы уверены?" data-method="delete" data-remote="true" class="text-red-600 hover:text-red-900" href="{{ route('labels.destroy', $label) }}">
-                                Удалить
-                            </a>
+                            {{ Form::open(['method' => 'DELETE', 'route' => ['labels.destroy', $label]]) }}
+                                @csrf
+                                @method('delete')
+                                {{ Form::submit('Удалить', ['class' => 'text-red-600 hover:text-red-900']) }}
+                            {{ Form::close() }}
                             <a class="text-blue-600 hover:text-blue-900" href="{{ route('labels.edit', $label) }}">
                                 Изменить
                             </a>

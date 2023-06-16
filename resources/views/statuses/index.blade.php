@@ -31,9 +31,11 @@
                     <td>{{ $task_status->created_at->format('d.m.Y') }}</td>
                     <td>
                         @can('status')
-                            <a data-method="delete" data-confirm="Вы уверены?" data-remote="true" rel="nofollow" class="text-red-600 hover:text-red-900" href="{{ route('task_statuses.destroy', ['task_status' => $task_status]) }}">
-                                Удалить
-                            </a>
+                            {{ Form::open(['method' => 'DELETE', 'route' => ['task_statuses.destroy', $task_status]]) }}
+                                @csrf
+                                @method('delete')
+                                {{ Form::submit('Удалить', ['class' => 'text-red-600 hover:text-red-900']) }}
+                            {{ Form::close() }}
                             <a class="text-blue-600 hover:text-blue-900" href="{{ route('task_statuses.edit', ['task_status' => $task_status]) }}">
                                 Изменить
                             </a>

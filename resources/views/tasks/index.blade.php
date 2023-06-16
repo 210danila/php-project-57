@@ -61,11 +61,13 @@
                <td>{{ $task->created_at->format('d.m.Y') }}</td>
                <td>
                   @can('delete-task', $task)
-                     <a data-method="delete" data-confirm="Вы уверены?" data-remote="true" rel="nofollow" class="text-red-600 hover:text-red-900" href="{{ route('tasks.destroy', ['task' => $task]) }}">
-                        Удалить
-                     </a>
+                     {{ Form::open(['method' => 'DELETE', 'route' => ['tasks.destroy', $task]]) }}
+                        @csrf
+                        @method('delete')
+                        {{ Form::submit('Удалить', ['class' => 'text-red-600 hover:text-red-900']) }}
+                     {{ Form::close() }}
                   @endcan
-                     @can('update-task')
+                  @can('update-task')
                      <a href="{{ route('tasks.edit', ['task' => $task]) }}" class="text-blue-600 hover:text-blue-900">
                         Изменить
                      </a>
