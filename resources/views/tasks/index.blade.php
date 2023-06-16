@@ -58,7 +58,7 @@
                </td>
                <td>{{ $task->createdBy->name }}</td>
                <td>{{ $task->assignedTo->name ?? '' }}</td>
-               <td>{{ $task->created_at }}</td>
+               <td>{{ $task->created_at->format('d.m.Y') }}</td>
                <td>
                   @can('delete-task', $task)
                      <a data-method="delete" data-confirm="Вы уверены?" data-remote="true" rel="nofollow" class="text-red-600 hover:text-red-900" href="{{ route('tasks.destroy', ['task' => $task]) }}">

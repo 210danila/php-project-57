@@ -64,7 +64,10 @@ class TaskController extends Controller
 
         $task = new Task($data);
         $task->save();
-        $task->labels()->attach($data['labels']);
+        if (isset($data['labels'])) {
+            $data['labels'] = array_filter($data['labels'], fn($label) => !is_null($label));
+            $task->labels()->attach($data['labels']);
+        }
 
         flash(__('flash.task_created'))->success();
         return redirect()->route('tasks.index');
@@ -109,7 +112,10 @@ class TaskController extends Controller
         $task->fill($data);
         $task->save();
         $task->labels()->detach();
-        $task->labels()->attach($data['labels']);
+        if (isset($data['labels'])) {
+            $data['labels'] = array_filter($data['labels'], fn($label) => !is_null($label));
+            $task->labels()->attach($data['labels']);
+        }
 
         flash(__('flash.task_updated'))->success();
         return redirect()->route('tasks.index');

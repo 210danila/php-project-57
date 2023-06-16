@@ -10,7 +10,7 @@ use App\Models\{Task, TaskStatus};
 
 class TaskSeeder extends Seeder
 {
-    private $fakeNamesAndDescriptions = [
+    public const FAKE_DATA = [
         ['name' => 'Исправить ошибку в какой-нибудь строке', 'description' => 'Я тут ошибку нашёл, надо бы её исправить и так далее и так далее'],
         ['name' => 'Допилить дизайн главной страницы', 'description' => 'Вёрстка поехала в далёкие края. Нужно удалить бутстрап!'],
         ['name' => 'Отрефакторить авторизацию', 'description' => 'Выпилить всё легаси, которое найдёшь'],
@@ -34,8 +34,8 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach ($this->fakeNamesAndDescriptions as $fakeNameAndDescription) {
-            Task::factory($fakeNameAndDescription)->make()->save();
+        foreach (self::FAKE_DATA as $fakeElement) {
+            Task::factory($fakeElement)->create();
         }
     }
 }

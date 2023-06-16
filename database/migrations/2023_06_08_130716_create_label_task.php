@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('task_id');
             $table->bigInteger('label_id');
-            $table->foreign('task_id')->references('id')->on('tasks');
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
             $table->foreign('label_id')->references('id')->on('labels');
             $table->timestamps();
         });
