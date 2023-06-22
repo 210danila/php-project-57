@@ -1,7 +1,5 @@
-install:
-	composer install
-
 setup:
+	composer install
 	npm ci
 	npm run build
 
