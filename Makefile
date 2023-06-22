@@ -1,8 +1,9 @@
-make setup:
-	apt-get install -y npm
-
 install:
 	composer install
+
+setup:
+	npm ci
+	npm run build
 
 start:
 	php artisan serve
