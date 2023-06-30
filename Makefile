@@ -1,4 +1,5 @@
 setup:
+	cp .env.example .env
 	composer install
 	npm ci
 	npm run build

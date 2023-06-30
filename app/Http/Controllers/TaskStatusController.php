@@ -6,6 +6,7 @@ use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\{Gate, DB};
+use App\Http\Requests\TaskStatusRequest;
 
 class TaskStatusController extends Controller
 {

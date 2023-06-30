@@ -31,11 +31,15 @@
                     <td>{{ $task_status->created_at->format('d.m.Y') }}</td>
                     <td>
                         @can('status')
-                            {{ Form::open(['method' => 'DELETE', 'route' => ['task_statuses.destroy', $task_status]]) }}
+                            {{ Form::open(['method' => 'POST', 'route' => ['task_statuses.destroy', $task_status], 'style' => "display: none;", 'id' => "delete-form-$task_status->id"]) }}
                                 @csrf
                                 @method('delete')
-                                {{ Form::submit('Удалить', ['class' => 'text-red-600 hover:text-red-900']) }}
                             {{ Form::close() }}
+                            
+                            <a href="{{ route('task_statuses.destroy', $task_status) }}" rel="nofollow" onclick="event.preventDefault(); if (confirm(this.getAttribute('data-confirm'))) { document.getElementById('delete-form-{{ $task_status->id }}').submit(); }" class="text-red-600 hover:text-red-900">
+                                Удалить
+                            </a>
+
                             <a class="text-blue-600 hover:text-blue-900" href="{{ route('task_statuses.edit', ['task_status' => $task_status]) }}">
                                 Изменить
                             </a>
