@@ -24,7 +24,6 @@ class LabelsTest extends TestCase
             ->actingAs($this->actingUser)
             ->post(route('labels.store'), ['name' => "newTestLabel"]);
 
-        dd($response);
         $response->assertRedirect(route('labels.index'));
         $this->assertDatabaseHas('labels', ['name' => 'newTestLabel']);
     }

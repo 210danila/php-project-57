@@ -9,6 +9,7 @@
 __Иструкция по установке:__
 - Перед началом необходимо установить nodejs и postgresql:
 > sudo apt install nodejs
+[Установка Postgresql](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04)
 - Установите зависимости комндой:
 > make install
 - Установите значение переменной DATABASE_URL в файле .env формата:

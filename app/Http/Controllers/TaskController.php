@@ -83,7 +83,7 @@ class TaskController extends Controller
         Gate::authorize('store-or-update-task');
         $statuses = TaskStatus::pluck('name', 'id')->all();
         $users = User::pluck('name', 'id')->all();
-        $allLabels = Label::all()->pluck('name', 'id')->all();
+        $allLabels = Label::pluck('name', 'id')->all();
         $selectedLabels = collect($task->labels()->get())->pluck('id')->all();
         return view('tasks.edit', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
