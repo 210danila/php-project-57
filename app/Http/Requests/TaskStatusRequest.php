@@ -13,7 +13,7 @@ class TaskStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return True;
     }
 
     /**
@@ -25,6 +25,19 @@ class TaskStatusRequest extends FormRequest
     {
         return [
             'name' => ['required', 'unique:task_statuses']
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'Это обязательное поле',
+            'name.unique' => 'Статус с таким именем уже существует',
         ];
     }
 }

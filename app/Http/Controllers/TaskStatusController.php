@@ -32,7 +32,7 @@ class TaskStatusController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TaskStatusRequest $request)
     {
         Gate::authorize('status');
         $data = $this->validate($request, [
@@ -65,7 +65,7 @@ class TaskStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TaskStatus $task_status)
+    public function update(TaskStatusRequest $request, TaskStatus $task_status)
     {
         Gate::authorize('status');
         $data = $this->validate($request, [
