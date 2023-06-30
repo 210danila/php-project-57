@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\{TaskStatus, User, Task}; 
+use App\Models\{TaskStatus, User, Task};
 
 class TaskStatusesTest extends TestCase
 {

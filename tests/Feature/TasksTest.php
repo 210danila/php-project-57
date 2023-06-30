@@ -47,7 +47,6 @@ class TasksTest extends TestCase
 
     public function testEditingTask(): void
     {
-        
         $task = new Task($this->taskData);
         $task->save();
         $this->taskData['name'] = 'newTaskName';
