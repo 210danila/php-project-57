@@ -19,7 +19,7 @@ class LabelsTest extends TestCase
         $this->actingUser = User::factory()->create();
     }
 
-    public function test_creating_label(): void
+    public function testCreatingLabel(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
@@ -29,7 +29,7 @@ class LabelsTest extends TestCase
         $this->assertDatabaseHas('labels', ['name' => 'newTestLabel']);
     }
 
-    public function test_creating_label_by_guest(): void
+    public function testCreatingLabelByGuest(): void
     {
         $response = $this->post(route('labels.store'), ['name' => "newTestLabel"]);
 
@@ -37,7 +37,7 @@ class LabelsTest extends TestCase
         $this->assertDatabaseMissing('labels', ['name' => 'newTestLabel']);
     }
 
-    public function test_editing_label(): void
+    public function testEditingLabel(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this
@@ -50,7 +50,7 @@ class LabelsTest extends TestCase
         $this->assertDatabaseHas('labels', ['name' => 'editedTestLabel']);
     }
 
-    public function test_editing_label_by_guest(): void
+    public function testEditingLabelByGuest(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this->patch(route('labels.update', $testLabel), ['name' => "editedTestLabel"]);
@@ -59,7 +59,7 @@ class LabelsTest extends TestCase
         $this->assertDatabaseMissing('labels', ['name' => 'editedTestLabel']);
     }
 
-    public function test_destroying_label(): void
+    public function testDestroyingLabel(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this
@@ -70,7 +70,7 @@ class LabelsTest extends TestCase
         $this->assertDatabaseMissing('labels', ['name' => $testLabel->name]);
     }
 
-    public function test_destroying_label_by_guest(): void
+    public function testDestroyingLabelByGuest(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this->delete(route('labels.destroy', $testLabel));
@@ -79,7 +79,7 @@ class LabelsTest extends TestCase
         $this->assertDatabaseHas('labels', ['name' => $testLabel->name]);
     }
 
-    public function test_destroying_bounded_with_task_label(): void
+    public function testDestroyingBoundedWithTaskLabel(): void
     {
         $testLabel = Label::factory()->create();
         $status = TaskStatus::factory()->create();

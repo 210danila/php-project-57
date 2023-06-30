@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\{Task, User, TaskStatus};
 
@@ -27,7 +26,7 @@ class TasksTest extends TestCase
         ];
     }
 
-    public function test_creating_new_task(): void
+    public function testCreatingNewTask(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
@@ -37,7 +36,7 @@ class TasksTest extends TestCase
         $this->assertDatabaseHas('tasks', $this->taskData);
     }
 
-    public function test_creating_new_task_by_guest(): void
+    public function testCreatingNewTaskByGuest(): void
     {
         $response = $this
             ->post(route('tasks.store'), $this->taskData);
@@ -46,7 +45,7 @@ class TasksTest extends TestCase
         $this->assertDatabaseMissing('tasks', $this->taskData);
     }
 
-    public function test_editing_task(): void
+    public function testEditingTask(): void
     {
         
         $task = new Task($this->taskData);
@@ -61,7 +60,7 @@ class TasksTest extends TestCase
         $this->assertDatabaseHas('tasks', $this->taskData);
     }
 
-    public function test_editing_task_by_guest(): void
+    public function testEditingTaskByGuest(): void
     {
         $task = new Task($this->taskData);
         $task->save();
@@ -74,7 +73,7 @@ class TasksTest extends TestCase
         $this->assertDatabaseMissing('tasks', $this->taskData);
     }
 
-    public function test_destroying_task(): void
+    public function testDestroyingTask(): void
     {
         $task = new Task($this->taskData);
         $task->save();
@@ -87,7 +86,7 @@ class TasksTest extends TestCase
         $this->assertDatabaseMissing('tasks', $this->taskData);
     }
 
-    public function test_destroying_task_not_by_creator(): void
+    public function testDestroyingTaskNotByCreator(): void
     {
         $task = new Task($this->taskData);
         $task->save();
