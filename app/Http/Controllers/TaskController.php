@@ -20,7 +20,7 @@ class TaskController extends Controller
         $statuses = TaskStatus::pluck('name', 'id')->all();
         $users = User::pluck('name', 'id')->all();
 
-        if (!is_null($filterQueries)) {
+        if (is_null($filterQueries)) {
             $tasks = Task::orderBy('id')->paginate(15);
             return view('tasks.index', compact('statuses', 'users', 'filterQueries', 'tasks'));
         }
