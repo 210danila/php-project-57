@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class TaskRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class TaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Gate::allows('store-or-update-task');
     }
 
     /**
@@ -22,7 +23,25 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|unique:tasks',
+            'description' => 'nullable',
+            'status_id' => 'required',
+            'assigned_to_id' => 'nullable',
+            'labels' => 'nullable|array'
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'Это обязательное поле',
+            'name.unique' => 'Задача с таким именем уже существует',
+            'status_id.required' => 'Это обязательное поле'
         ];
     }
 }

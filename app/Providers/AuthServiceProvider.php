@@ -34,11 +34,7 @@ class AuthServiceProvider extends ServiceProvider
             return true;
         });
 
-        Gate::define(('store-task'), function (User $user) {
-            return true;
-        });
-
-        Gate::define(('update-task'), function (User $user) {
+        Gate::define(('store-or-update-task'), function (User $user) {
             return true;
         });
 

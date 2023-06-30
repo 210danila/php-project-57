@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{Task, TaskStatus, User, Label};
 use Illuminate\Http\Request;
+use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\{Auth, Gate, DB};
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -38,7 +39,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        Gate::authorize('store-task');
+        Gate::authorize('store-or-update-task');
         $task = new Task();
         $statuses = TaskStatus::all()->pluck('name', 'id')->all();
         $users = User::all()->pluck('name', 'id')->all();
@@ -50,18 +51,10 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        Gate::authorize('store-task');
-        $data = $this->validate($request, [
-            'name' => 'required',
-            'description' => 'nullable',
-            'status_id' => 'required',
-            'assigned_to_id' => 'nullable',
-            'labels' => 'nullable|array'
-        ]);
+        $data = $request->validated();
         $data['created_by_id'] = Auth::id();
-
         $task = new Task($data);
         $task->save();
         if (isset($data['labels'])) {
@@ -87,7 +80,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        Gate::authorize('update-task');
+        Gate::authorize('store-or-update-task');
         $statuses = TaskStatus::all()->pluck('name', 'id')->all();
         $users = User::all()->pluck('name', 'id')->all();
         $allLabels = Label::all()->pluck('name', 'id')->all();
@@ -98,17 +91,9 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(TaskRequest $request, Task $task)
     {
-        Gate::authorize('update-task');
-        $data = $this->validate($request, [
-            'name' => 'required',
-            'description' => 'nullable',
-            'status_id' => 'required',
-            'assigned_to_id' => 'nullable',
-            'labels' => 'nullable|array'
-        ]);
-
+        $data = $request->validated();
         $task->fill($data);
         $task->save();
         $task->labels()->detach();

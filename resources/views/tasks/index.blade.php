@@ -24,7 +24,7 @@
             </div>
          {{ Form::close() }}
       </div>
-      @can('store-task')
+      @can('store-or-update-task')
          <div class="ml-auto">
             <a href="{{ route('tasks.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
                Создать задачу            
@@ -61,13 +61,15 @@
                <td>{{ $task->created_at->format('d.m.Y') }}</td>
                <td>
                   @can('delete-task', $task)
-                     {{ Form::open(['method' => 'DELETE', 'route' => ['tasks.destroy', $task]]) }}
+                     {{ Form::open(['method' => 'POST', 'route' => ['tasks.destroy', $task], 'style' => "display: none;", 'id' => "delete-form-$task->id"]) }}
                         @csrf
                         @method('delete')
-                        {{ Form::submit('Удалить', ['class' => 'text-red-600 hover:text-red-900']) }}
                      {{ Form::close() }}
+                     <a href="{{ route('tasks.destroy', $task) }}" rel="nofollow" onclick="event.preventDefault(); if (confirm(this.getAttribute('data-confirm'))) { document.getElementById('delete-form-{{ $task->id }}').submit(); }" class="text-red-600 hover:text-red-900">
+                           Удалить
+                     </a>
                   @endcan
-                  @can('update-task')
+                  @can('store-or-update-task')
                      <a href="{{ route('tasks.edit', ['task' => $task]) }}" class="text-blue-600 hover:text-blue-900">
                         Изменить
                      </a>
