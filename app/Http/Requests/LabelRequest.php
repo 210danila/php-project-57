@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class TaskStatusRequest extends FormRequest
+class LabelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,8 @@ class TaskStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'unique:task_statuses']
+            'name' => 'required|unique:labels',
+            'description' => 'nullable'
         ];
     }
 
@@ -36,7 +37,7 @@ class TaskStatusRequest extends FormRequest
     {
         return [
             'name.required' => 'Это обязательное поле',
-            'name.unique' => 'Статус с таким именем уже существует',
+            'name.unique' => 'Метка с таким именем уже существует',
         ];
     }
 }

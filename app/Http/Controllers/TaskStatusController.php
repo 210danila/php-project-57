@@ -34,11 +34,7 @@ class TaskStatusController extends Controller
      */
     public function store(TaskStatusRequest $request)
     {
-        Gate::authorize('status');
-        $data = $this->validate($request, [
-            'name' => 'required|unique:task_statuses'
-        ]);
-
+        $data = $request->validated();
         $status = new TaskStatus($data);
         $status->save();
         flash(__('flash.status_created'))->success();
@@ -67,14 +63,7 @@ class TaskStatusController extends Controller
      */
     public function update(TaskStatusRequest $request, TaskStatus $task_status)
     {
-        Gate::authorize('status');
-        $data = $this->validate($request, [
-            'name' => [
-                'required',
-                Rule::unique('task_statuses')->ignore($task_status->id)
-            ]
-        ]);
-
+        $data = $request->validated();
         $task_status->fill($data);
         $task_status->save();
         flash(__('flash.status_edited'))->success();
@@ -85,7 +74,7 @@ class TaskStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, TaskStatus $task_status)
+    public function destroy(TaskStatus $task_status)
     {
         Gate::authorize('status');
         if (

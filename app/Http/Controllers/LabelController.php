@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Label, Task};
-use Illuminate\Http\Request;
+use App\Models\Label;
 use Illuminate\Support\Facades\{DB, Gate};
-use Carbon\Carbon;
+use App\Http\Requests\LabelRequest;
 
 class LabelController extends Controller
 {
@@ -31,14 +30,9 @@ class LabelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(LabelRequest $request)
     {
-        Gate::authorize('label');
-        $data = $this->validate($request, [
-            'name' => 'required',
-            'description' => 'nullable'
-        ]);
-
+        $data = $request->validated();
         $label = new Label($data);
         $label->save();
         flash(__('flash.label_created'))->success();
@@ -66,14 +60,9 @@ class LabelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Label $label)
+    public function update(LabelRequest $request, Label $label)
     {
-        Gate::authorize('label');
-        $data = $this->validate($request, [
-            'name' => 'required',
-            'description' => 'nullable'
-        ]);
-
+        $data = $request->validated();
         $label->fill($data);
         $label->save();
         flash(__('flash.label_updated'))->success();

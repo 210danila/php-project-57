@@ -35,11 +35,9 @@
                                 @csrf
                                 @method('delete')
                             {{ Form::close() }}
-                            
                             <a href="{{ route('task_statuses.destroy', $task_status) }}" rel="nofollow" onclick="event.preventDefault(); if (confirm(this.getAttribute('data-confirm'))) { document.getElementById('delete-form-{{ $task_status->id }}').submit(); }" class="text-red-600 hover:text-red-900">
                                 Удалить
                             </a>
-
                             <a class="text-blue-600 hover:text-blue-900" href="{{ route('task_statuses.edit', ['task_status' => $task_status]) }}">
                                 Изменить
                             </a>
