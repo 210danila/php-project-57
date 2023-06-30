@@ -10,16 +10,15 @@ __Иструкция по установке:__
 - Перед началом необходимо установить nodejs и postgresql:
 > sudo apt install nodejs
 [Установка Postgresql](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04)
+В php.ini раскомментируйте строки, если в их начале стоит ';'
+> ;extension=php_pdo_pgsql.dll
+> ;extension=php_pdo_pgsql.dll
 - Установите зависимости комндой:
-> make install
+> make setup
 - Установите значение переменной DATABASE_URL в файле .env формата:
   _postgresql://{user}:{password}@{host}:{port}/{db}_
   Например: 
 > export DATABASE_URL=postgresql://username:mypassword@localhost:5432/mydb
-- Установите NodeJs:
-> sudo apt install nodejs
-- Установите npm:
-> sudo apt install npm
 - Запустите проект с помощью команды:
 > make start
 
