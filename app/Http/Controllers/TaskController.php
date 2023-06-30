@@ -17,10 +17,10 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $filterQueries = $request->query('filter');
-        $statuses = TaskStatus::all()->pluck('name', 'id')->all();
-        $users = User::all()->pluck('name', 'id')->all();
+        $statuses = TaskStatus::pluck('name', 'id')->all();
+        $users = User::pluck('name', 'id')->all();
 
-        if (!$filterQueries) {
+        if (!is_null($filterQueries)) {
             $tasks = Task::orderBy('id')->paginate(15);
             return view('tasks.index', compact('statuses', 'users', 'filterQueries', 'tasks'));
         }
@@ -41,9 +41,9 @@ class TaskController extends Controller
     {
         Gate::authorize('store-or-update-task');
         $task = new Task();
-        $statuses = TaskStatus::all()->pluck('name', 'id')->all();
-        $users = User::all()->pluck('name', 'id')->all();
-        $allLabels = Label::all()->pluck('name', 'id')->all();
+        $statuses = TaskStatus::pluck('name', 'id')->all();
+        $users = User::pluck('name', 'id')->all();
+        $allLabels = Label::pluck('name', 'id')->all();
         $selectedLabels = [];
         return view('tasks.create', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
@@ -71,7 +71,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $labels = $task->labels;
+        $labels = $task->labels()->get();
         return view('tasks.show', compact('task', 'labels'));
     }
 
@@ -81,10 +81,10 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         Gate::authorize('store-or-update-task');
-        $statuses = TaskStatus::all()->pluck('name', 'id')->all();
-        $users = User::all()->pluck('name', 'id')->all();
+        $statuses = TaskStatus::pluck('name', 'id')->all();
+        $users = User::pluck('name', 'id')->all();
         $allLabels = Label::all()->pluck('name', 'id')->all();
-        $selectedLabels = collect($task->labels)->pluck('id')->all();
+        $selectedLabels = collect($task->labels()->get())->pluck('id')->all();
         return view('tasks.edit', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
 

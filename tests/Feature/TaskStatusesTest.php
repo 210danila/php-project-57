@@ -10,7 +10,7 @@ class TaskStatusesTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $actingUser;
+    private User $actingUser;
 
     public function setUp(): void
     {

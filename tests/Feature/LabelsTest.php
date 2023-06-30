@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\{User, Task, Label, TaskStatus};
 
@@ -11,7 +10,7 @@ class LabelsTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $actingUser;
+    private User $actingUser;
 
     public function setUp(): void
     {
@@ -25,6 +24,7 @@ class LabelsTest extends TestCase
             ->actingAs($this->actingUser)
             ->post(route('labels.store'), ['name' => "newTestLabel"]);
 
+        dd($response);
         $response->assertRedirect(route('labels.index'));
         $this->assertDatabaseHas('labels', ['name' => 'newTestLabel']);
     }
