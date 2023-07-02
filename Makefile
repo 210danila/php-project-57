@@ -9,8 +9,7 @@ migrate:
 	php artisan migrate
 
 seed:
-	php artisan
-	db:seed --class=TaskStatusSeeder
+	php artisan db:seed --class=TaskStatusSeeder
 
 refresh:
 	php artisan migrate:refresh
