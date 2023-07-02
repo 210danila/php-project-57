@@ -1,8 +1,20 @@
 setup:
 	cp .env.example .env
 	composer install
+	php artisan key:generate
 	npm ci
 	npm run build
+
+migrate:
+	php artisan migrate
+
+seed:
+	php artisan
+	db:seed --class=TaskStatusSeeder
+
+refresh:
+	php artisan migrate:refresh
+	php artisan db:seed --class=TaskStatusSeeder
 
 start:
 	php artisan serve
@@ -12,10 +24,6 @@ lint:
 
 phpcbf:
 	composer exec --verbose phpcbf -- --standard=PSR12 app routes
-
-refresh:
-	php artisan migrate:refresh
-	php artisan db:seed --class=TaskStatusSeeder
 
 .PHONY: tests
 tests:
