@@ -11,5 +11,19 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    https:true,
+    build: {
+        outDir: 'public/build',
+        assetsDir: '',
+        manifest: true,
+        minify: true,
+        sourcemap: false,
+        rollupOptions: {
+            input: {
+                app: 'resources/js/app.js',
+            },
+        },
+    },
+    server: {
+        https: true,
+    },
 });
