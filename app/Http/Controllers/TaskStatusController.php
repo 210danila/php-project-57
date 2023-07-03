@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaskStatus;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\{Gate, DB};
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\TaskStatusRequest;
 
 class TaskStatusController extends Controller
@@ -43,13 +41,6 @@ class TaskStatusController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(TaskStatus $task_status)
-    {
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(TaskStatus $task_status)
@@ -77,15 +68,14 @@ class TaskStatusController extends Controller
     public function destroy(TaskStatus $task_status)
     {
         Gate::authorize('status');
-        if (
-            DB::table('task_statuses')->where('id', $task_status->id)->exists() and
-            DB::table('tasks')->where('status_id', $task_status->id)->count() === 0
-        ) {
-            $task_status->delete();
-            flash(__('flash.status_deleted'))->success();
-        } else {
+        if ($task_status->tasks()->exists()) {
             flash(__('flash.status_not_deleted'))->error();
+            return back();
         }
+
+        $task_status->delete();
+        flash(__('flash.status_deleted'))->success();
+
         return redirect()->route('task_statuses.index');
     }
 }

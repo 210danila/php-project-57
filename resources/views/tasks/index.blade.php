@@ -61,12 +61,8 @@
                <td>{{ $task->created_at->format('d.m.Y') }}</td>
                <td>
                   @can('delete-task', $task)
-                     {{ Form::open(['method' => 'POST', 'route' => ['tasks.destroy', $task], 'style' => "display: none;", 'id' => "delete-form-$task->id"]) }}
-                        @csrf
-                        @method('delete')
-                     {{ Form::close() }}
-                     <a href="{{ route('tasks.destroy', $task) }}" rel="nofollow" onclick="event.preventDefault(); if (confirm(this.getAttribute('data-confirm'))) { document.getElementById('delete-form-{{ $task->id }}').submit(); }" class="text-red-600 hover:text-red-900">
-                           Удалить
+                     <a data-confirm="Вы уверены?" data-method="delete" class="text-red-600 hover:text-red-900" href="{{ route('tasks.destroy', $task) }}">
+                        Удалить
                      </a>
                   @endcan
                   @can('store-or-update-task')

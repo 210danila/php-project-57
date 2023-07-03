@@ -22,13 +22,27 @@ class TaskRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|unique:tasks',
-            'description' => 'nullable',
-            'status_id' => 'required',
-            'assigned_to_id' => 'nullable',
-            'labels' => 'nullable|array'
-        ];
+        switch ($this->method()) {
+            case 'POST':
+                return [
+                    'name' => 'required|unique:tasks',
+                    'description' => 'nullable',
+                    'status_id' => 'required',
+                    'assigned_to_id' => 'nullable',
+                    'labels' => 'nullable|array'
+                ];
+            case 'PUT':
+            case 'PATCH':
+                return [
+                    'name' => 'required|unique:tasks,name,' . $this->route('task')->id,
+                    'description' => 'nullable',
+                    'status_id' => 'required',
+                    'assigned_to_id' => 'nullable',
+                    'labels' => 'nullable|array'
+                ];
+            default:
+                return [];
+        }
     }
 
     /**

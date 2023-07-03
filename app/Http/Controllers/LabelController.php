@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Label;
-use Illuminate\Support\Facades\{DB, Gate};
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\LabelRequest;
 
 class LabelController extends Controller
@@ -41,14 +41,6 @@ class LabelController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Label $label)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Label $label)
@@ -76,15 +68,14 @@ class LabelController extends Controller
     public function destroy(Label $label)
     {
         Gate::authorize('label');
-        if (
-            DB::table('labels')->where('id', $label->id)->exists() and
-            $label->tasks()->count() === 0
-        ) {
-            $label->delete();
-            flash(__('flash.label_deleted'))->success();
-        } else {
+        if ($label->tasks()->exists()) {
             flash(__('flash.label_not_deleted'))->error();
+            return back();
         }
+
+        $label->delete();
+        flash(__('flash.label_deleted'))->success();
+
         return redirect()->route('labels.index');
     }
 }

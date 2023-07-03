@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\{HasMany};
 
 class User extends Authenticatable
 {
@@ -14,14 +15,14 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
 
-    public function createdTasks()
+    public function createdTasks(): hasMany
     {
-        return $this->hasMany('App\Models\Tasks', 'created_by_id');
+        return $this->hasMany(Task::class, 'created_by_id');
     }
 
-    public function assignedTasks()
+    public function assignedTasks(): hasMany
     {
-        return $this->hasMany('App\Models\Tasks', 'assigned_to_id');
+        return $this->hasMany(Task::class, 'assigned_to_id');
     }
 
     /**

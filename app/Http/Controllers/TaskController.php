@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\{Task, TaskStatus, User, Label};
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
-use Illuminate\Support\Facades\{Auth, Gate, DB};
+use Illuminate\Support\Facades\{Auth, Gate};
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -60,9 +60,9 @@ class TaskController extends Controller
         if (isset($data['labels'])) {
             $data['labels'] = array_filter($data['labels'], fn($label) => !is_null($label));
             $task->labels()->attach($data['labels']);
+            flash(__('flash.task_created'))->success();
         }
 
-        flash(__('flash.task_created'))->success();
         return redirect()->route('tasks.index');
     }
 
@@ -84,7 +84,7 @@ class TaskController extends Controller
         $statuses = TaskStatus::pluck('name', 'id')->all();
         $users = User::pluck('name', 'id')->all();
         $allLabels = Label::pluck('name', 'id')->all();
-        $selectedLabels = collect($task->labels()->get())->pluck('id')->all();
+        $selectedLabels = $task->labels()->get()->pluck('id')->all();
         return view('tasks.edit', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
 
@@ -100,9 +100,9 @@ class TaskController extends Controller
         if (isset($data['labels'])) {
             $data['labels'] = array_filter($data['labels'], fn($label) => !is_null($label));
             $task->labels()->attach($data['labels']);
+            flash(__('flash.task_updated'))->success();
         }
 
-        flash(__('flash.task_updated'))->success();
         return redirect()->route('tasks.index');
     }
 
@@ -112,12 +112,8 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         Gate::authorize('delete-task', $task);
-        if (DB::table('tasks')->where('id', $task->id)->exists()) {
-            $task->delete();
-            flash(__('flash.task_deleted'))->success();
-        } else {
-            flash(__('flash.task_not_deleted'))->error();
-        }
+        $task->delete();
+        flash(__('flash.task_deleted'))->success();
         return redirect()->route('tasks.index');
     }
 }

@@ -31,11 +31,7 @@
                     <td>{{ $label->created_at->format('d.m.Y') }}</td>
                     <td>
                         @can('label')
-                            {{ Form::open(['method' => 'POST', 'route' => ['labels.destroy', $label], 'style' => "display: none;", 'id' => "delete-form-$label->id"]) }}
-                                @csrf
-                                @method('delete')
-                            {{ Form::close() }}
-                            <a href="{{ route('labels.destroy', $label) }}" rel="nofollow" onclick="event.preventDefault(); if (confirm(this.getAttribute('data-confirm'))) { document.getElementById('delete-form-{{ $label->id }}').submit(); }" class="text-red-600 hover:text-red-900">
+                            <a data-confirm="Вы уверены?" data-method="delete" class="text-red-600 hover:text-red-900" href="{{ route('labels.destroy', $label) }}">
                                 Удалить
                             </a>
                             <a class="text-blue-600 hover:text-blue-900" href="{{ route('labels.edit', ['label' => $label]) }}">

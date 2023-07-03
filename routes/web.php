@@ -18,8 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('root');
 
-Route::resource('task_statuses', TaskStatusController::class);
+Route::resource('task_statuses', TaskStatusController::class)->except(['show']);
+Route::resource('labels', LabelController::class)->except(['show']);
 Route::resource('tasks', TaskController::class);
-Route::resource('labels', LabelController::class);
 
 require __DIR__ . '/auth.php';
