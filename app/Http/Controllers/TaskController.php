@@ -84,8 +84,10 @@ class TaskController extends Controller
         $statuses = TaskStatus::pluck('name', 'id')->all();
         $users = User::pluck('name', 'id')->all();
         $allLabels = Label::pluck('name', 'id')->all();
-        $selectedLabels = $task->labels()->get();
-        $selectedLabelsIds = $selectedLabels->pluck('id')->all();
+        $selectedLabels = DB::table('label_task')
+            ->where('task_id', $task->id)
+            ->pluck('label_id')
+            ->all();
         return view('tasks.edit', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
 
