@@ -5,12 +5,6 @@ setup:
 	npm ci
 	npm run build
 
-setup-prod:
-	cp .env.example .env
-	php artisan key:generate
-	npm ci
-	npm run prod
-
 migrate:
 	php artisan migrate
 
