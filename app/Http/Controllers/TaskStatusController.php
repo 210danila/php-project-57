@@ -78,4 +78,9 @@ class TaskStatusController extends Controller
 
         return redirect()->route('task_statuses.index');
     }
+
+    public function show(TaskStatus $taskStatus)
+    {
+        //
+    }
 }

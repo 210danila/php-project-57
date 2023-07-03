@@ -78,4 +78,9 @@ class LabelController extends Controller
 
         return redirect()->route('labels.index');
     }
+
+    public function show(Label $label)
+    {
+        //
+    }
 }
