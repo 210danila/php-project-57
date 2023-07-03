@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\{Task, TaskStatus, User, Label};
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
-use Illuminate\Support\Facades\{Auth, Gate};
+use Illuminate\Support\Facades\{Auth, Gate, DB};
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -84,7 +84,8 @@ class TaskController extends Controller
         $statuses = TaskStatus::pluck('name', 'id')->all();
         $users = User::pluck('name', 'id')->all();
         $allLabels = Label::pluck('name', 'id')->all();
-        $selectedLabels = $task->labels()->get(['label_id']);
+        $selectedLabels = $task->labels()->get();
+        $selectedLabelsIds = $selectedLabels->pluck('id')->all();
         return view('tasks.edit', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
 
