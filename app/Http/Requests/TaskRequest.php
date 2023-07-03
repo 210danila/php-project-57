@@ -33,6 +33,9 @@ class TaskRequest extends FormRequest
                 ];
             case 'PUT':
             case 'PATCH':
+                if (!isset($this->route('task')->id)) {
+                    return [];
+                }
                 return [
                     'name' => 'required|unique:tasks,name,' . $this->route('task')->id,
                     'description' => 'nullable',
