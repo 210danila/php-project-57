@@ -6,6 +6,8 @@
 
 ### 4ый проект хекслет менеджер задач
 
+[Тык](https://project-57.fly.dev)
+
 __Иструкция по установке:__
 - Перед началом необходимо установить nodejs и postgresql:
 > sudo apt install nodejs
