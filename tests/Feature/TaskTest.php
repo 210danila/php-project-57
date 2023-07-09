@@ -23,7 +23,7 @@ class TaskTest extends TestCase
         ];
     }
 
-    public function testIndex(): Void
+    public function testIndex(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
@@ -32,7 +32,7 @@ class TaskTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testCreate(): Void
+    public function testCreate(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
@@ -41,7 +41,7 @@ class TaskTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testEdit(): Void
+    public function testEdit(): void
     {
         $testTask = Task::factory()->create();
         $response = $this

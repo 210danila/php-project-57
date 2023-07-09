@@ -15,7 +15,7 @@ class LabelTest extends TestCase
         $this->actingUser = User::factory()->create();
     }
 
-    public function testIndex(): Void
+    public function testIndex(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
@@ -24,7 +24,7 @@ class LabelTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testCreate(): Void
+    public function testCreate(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
@@ -33,7 +33,7 @@ class LabelTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testEdit(): Void
+    public function testEdit(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this
