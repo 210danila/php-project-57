@@ -3,12 +3,12 @@
 @section('content')
 
 <div class="grid col-span-full">
-    <h1 class="mb-5">Метки</h1>
+    <h1 class="mb-5">@lang('Метки')</h1>
 
     <div>
-        @can('label')
+        @can('create', 'App\Models\Label')
             <a href="{{ route('labels.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Создать метку
+                @lang('Создать метку')
             </a>
         @endcan
     </div>
@@ -16,10 +16,10 @@
     <table class="mt-4">
         <thead class="border-b-2 border-solid border-black text-left">
             <tr>
-                <th>ID</th>
-                <th>Имя</th>
-                <th>Описание</th>
-                <th>Дата создания</th>
+                <th>@lang('ID')</th>
+                <th>@lang('Имя')</th>
+                <th>@lang('Описание')</th>
+                <th>@lang('Дата создания')</th>
             </tr>
         </thead>
         <tbody>
@@ -30,12 +30,14 @@
                     <td>{{ $label->description }}</td>
                     <td>{{ $label->created_at->format('d.m.Y') }}</td>
                     <td>
-                        @can('label')
+                        @can('delete', 'App\Models\Label')
                             <a data-confirm="Вы уверены?" data-method="delete" class="text-red-600 hover:text-red-900" href="{{ route('labels.destroy', $label) }}">
-                                Удалить
+                                @lang('Удалить')
                             </a>
+                        @endcan
+                        @can('update', 'App\Models\Label')
                             <a class="text-blue-600 hover:text-blue-900" href="{{ route('labels.edit', ['label' => $label]) }}">
-                                Изменить
+                                @lang('Изменить')
                             </a>
                         @endcan
                     </td>
@@ -43,5 +45,8 @@
             @endforeach
         </tbody>
     </table>
+    <div>
+        {{ $labels->links() }}
+     </div>
 </div>
 @endsection

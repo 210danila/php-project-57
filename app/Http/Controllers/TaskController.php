@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{Task, TaskStatus, User, Label};
 use Illuminate\Http\Request;
-use App\Http\Requests\TaskRequest;
+use App\Http\Requests\{TaskStoreRequest, TaskUpdateRequest};
 use Illuminate\Support\Facades\{Auth, Gate, DB};
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -17,19 +17,16 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $filterQueries = $request->query('filter');
-        $statuses = TaskStatus::pluck('name', 'id')->all();
-        $users = User::pluck('name', 'id')->all();
+        $statuses = TaskStatus::pluck('name', 'id');
+        $users = User::pluck('name', 'id');
 
-        if (is_null($filterQueries)) {
-            $tasks = Task::orderBy('id')->paginate(15);
-            return view('tasks.index', compact('statuses', 'users', 'filterQueries', 'tasks'));
-        }
         $tasks = QueryBuilder::for(Task::class)
             ->allowedFilters([
                 AllowedFilter::exact('status_id'),
                 AllowedFilter::exact('created_by_id'),
                 AllowedFilter::exact('assigned_to_id')
             ])
+            ->orderBy('id')
             ->paginate(15);
         return view('tasks.index', compact('statuses', 'users', 'filterQueries', 'tasks'));
     }
@@ -39,30 +36,28 @@ class TaskController extends Controller
      */
     public function create()
     {
-        Gate::authorize('store-or-update-task');
+        Gate::authorize('create', Task::class);
         $task = new Task();
-        $statuses = TaskStatus::pluck('name', 'id')->all();
-        $users = User::pluck('name', 'id')->all();
-        $allLabels = Label::pluck('name', 'id')->all();
-        $selectedLabels = [];
-        return view('tasks.create', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
+        $statuses = TaskStatus::pluck('name', 'id');
+        $users = User::pluck('name', 'id');
+        $allLabels = Label::pluck('name', 'id');
+        return view('tasks.create', compact('task', 'statuses', 'users', 'allLabels'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TaskRequest $request)
+    public function store(TaskStoreRequest $request)
     {
         $data = $request->validated();
-        $data['created_by_id'] = Auth::id();
-        $task = new Task($data);
+        $task = Auth::user()->createdTasks()->make($data);
         $task->save();
         if (isset($data['labels'])) {
-            $data['labels'] = array_filter($data['labels'], fn($label) => !is_null($label));
-            $task->labels()->attach($data['labels']);
-            flash(__('flash.task_created'))->success();
+            $labels = collect($data['labels'])->whereNotNull()->all();
+            $task->labels()->attach($labels);
         }
 
+        flash(__('flash.task_created'))->success();
         return redirect()->route('tasks.index');
     }
 
@@ -71,8 +66,8 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $labels = $task->labels()->get();
-        return view('tasks.show', compact('task', 'labels'));
+        $task->load('labels');
+        return view('tasks.show', compact('task'));
     }
 
     /**
@@ -80,32 +75,29 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        Gate::authorize('store-or-update-task');
-        $statuses = TaskStatus::pluck('name', 'id')->all();
+        Gate::authorize('update', Task::class);
+        $statuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id')->all();
-        $allLabels = Label::pluck('name', 'id')->all();
-        $selectedLabels = DB::table('label_task')
-            ->where('task_id', $task->id)
-            ->pluck('label_id')
-            ->all();
+        $allLabels = Label::pluck('name', 'id');
+        $selectedLabels = $task->labels()->pluck('label_id')->all();
         return view('tasks.edit', compact('task', 'statuses', 'users', 'allLabels', 'selectedLabels'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(TaskRequest $request, Task $task)
+    public function update(TaskUpdateRequest $request, Task $task)
     {
         $data = $request->validated();
         $task->fill($data);
         $task->save();
         $task->labels()->detach();
         if (isset($data['labels'])) {
-            $data['labels'] = array_filter($data['labels'], fn($label) => !is_null($label));
-            $task->labels()->attach($data['labels']);
-            flash(__('flash.task_updated'))->success();
+            $labels = collect($data['labels'])->whereNotNull()->all();
+            $task->labels()->attach($labels);
         }
 
+        flash(__('flash.task_updated'))->success();
         return redirect()->route('tasks.index');
     }
 
@@ -114,7 +106,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        Gate::authorize('delete-task', $task);
+        Gate::authorize('delete', $task);
         $task->delete();
         flash(__('flash.task_deleted'))->success();
         return redirect()->route('tasks.index');

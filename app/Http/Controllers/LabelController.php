@@ -13,7 +13,7 @@ class LabelController extends Controller
      */
     public function index()
     {
-        $labels = Label::all();
+        $labels = Label::paginate(15);
         return view('labels.index', compact('labels'));
     }
 
@@ -22,7 +22,7 @@ class LabelController extends Controller
      */
     public function create()
     {
-        Gate::authorize('label');
+        Gate::authorize('create', Label::class);
         $label = new Label();
         return view('labels.create', compact('label'));
     }
@@ -45,7 +45,7 @@ class LabelController extends Controller
      */
     public function edit(Label $label)
     {
-        Gate::authorize('label');
+        Gate::authorize('update', Label::class);
         return view('labels.edit', compact('label'));
     }
 
@@ -67,7 +67,7 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
-        Gate::authorize('label');
+        Gate::authorize('delete', Label::class);
         if ($label->tasks()->exists()) {
             flash(__('flash.label_not_deleted'))->error();
             return back();

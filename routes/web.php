@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\{Route, Log};
+use Illuminate\Support\Facades\{Route};
 use App\Http\Controllers\{TaskStatusController, TaskController, LabelController};
 
 /*
@@ -14,12 +14,12 @@ use App\Http\Controllers\{TaskStatusController, TaskController, LabelController}
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('root');
+Route::view('/', 'welcome')->name('root');
 
-Route::resource('task_statuses', TaskStatusController::class);
-Route::resource('labels', LabelController::class);
-Route::resource('tasks', TaskController::class);
+Route::resources([
+    'task_statuses' => TaskStatusController::class,
+    'labels' => labelController::class,
+    'tasks' => TaskController::class,
+]);
 
 require __DIR__ . '/auth.php';

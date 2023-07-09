@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\TaskStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -12,7 +13,7 @@ class TaskStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('status');
+        return Gate::allows('create', TaskStatus::class) && Gate::allows('update', TaskStatus::class);
     }
 
     /**
@@ -35,8 +36,8 @@ class TaskStatusRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Это обязательное поле',
-            'name.unique' => 'Статус с таким именем уже существует',
+            'name.required' => __('Это обязательное поле'),
+            'name.unique' => __('Статус с таким именем уже существует'),
         ];
     }
 }

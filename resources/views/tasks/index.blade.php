@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="grid col-span-full">
-   <h1 class="mb-5">Задачи</h1>
+   <h1 class="mb-5">@lang('Задачи')</h1>
    <div class="w-full flex items-center">
       <div>
          {{ Form::model($filterQueries, ['route' => ['tasks.index'], 'method' => 'GET']) }}
@@ -24,10 +24,10 @@
             </div>
          {{ Form::close() }}
       </div>
-      @can('store-or-update-task')
+      @can('create', 'App\Models\Task')
          <div class="ml-auto">
             <a href="{{ route('tasks.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
-               Создать задачу            
+               @lang('Создать задачу')            
             </a>
          </div>
       @endcan
@@ -35,14 +35,14 @@
    <table class="mt-4">
       <thead class="border-b-2 border-solid border-black text-left">
          <tr>
-            <th>ID</th>
-            <th>Статус</th>
-            <th>Имя</th>
-            <th>Автор</th>
-            <th>Исполнитель</th>
-            <th>Дата создания</th>
-            @can('update-task')
-               <th>Действия</th>
+            <th>@lang('ID')</th>
+            <th>@lang('Статус')</th>
+            <th>@lang('Имя')</th>
+            <th>@lang('Автор')</th>
+            <th>@lang('Исполнитель')</th>
+            <th>@lang('Дата создания')</th>
+            @can('update', 'App\Models\Task')
+               <th>@lang('Действия')</th>
             @endcan
          </tr>
       </thead>
@@ -60,14 +60,14 @@
                <td>{{ $task->assignedTo->name ?? '' }}</td>
                <td>{{ $task->created_at->format('d.m.Y') }}</td>
                <td>
-                  @can('delete-task', $task)
+                  @can('delete', $task)
                      <a data-confirm="Вы уверены?" data-method="delete" class="text-red-600 hover:text-red-900" href="{{ route('tasks.destroy', $task) }}">
-                        Удалить
+                        @lang('Удалить')
                      </a>
                   @endcan
-                  @can('store-or-update-task')
+                  @can('update', 'App\Models\Task')
                      <a href="{{ route('tasks.edit', ['task' => $task]) }}" class="text-blue-600 hover:text-blue-900">
-                        Изменить
+                        @lang('Изменить')
                      </a>
                   @endcan
                </td>

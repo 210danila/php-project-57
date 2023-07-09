@@ -2,14 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\{Task, User, TaskStatus};
 
-class TasksTest extends TestCase
+class TaskTest extends TestCase
 {
-    use RefreshDatabase;
-
     private User $actingUser;
     private TaskStatus $status;
     private array $taskData;
@@ -26,7 +23,35 @@ class TasksTest extends TestCase
         ];
     }
 
-    public function testCreatingNewTask(): void
+    public function testIndex(): Void
+    {
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('tasks.index'));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testCreate(): Void
+    {
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('tasks.create'));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testEdit(): Void
+    {
+        $testTask = Task::factory()->create();
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('tasks.edit', $testTask));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testStore(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
@@ -36,7 +61,7 @@ class TasksTest extends TestCase
         $this->assertDatabaseHas('tasks', $this->taskData);
     }
 
-    public function testCreatingNewTaskByGuest(): void
+    public function testStoreAsGuest(): void
     {
         $response = $this
             ->post(route('tasks.store'), $this->taskData);
@@ -45,10 +70,9 @@ class TasksTest extends TestCase
         $this->assertDatabaseMissing('tasks', $this->taskData);
     }
 
-    public function testEditingTask(): void
+    public function testUpdate(): void
     {
-        $task = new Task($this->taskData);
-        $task->save();
+        $task = Task::factory($this->taskData)->create();
         $this->taskData['name'] = 'newTaskName';
 
         $response = $this
@@ -59,7 +83,7 @@ class TasksTest extends TestCase
         $this->assertDatabaseHas('tasks', $this->taskData);
     }
 
-    public function testEditingTaskByGuest(): void
+    public function testUpdateAsGuest(): void
     {
         $task = new Task($this->taskData);
         $task->save();
@@ -72,10 +96,10 @@ class TasksTest extends TestCase
         $this->assertDatabaseMissing('tasks', $this->taskData);
     }
 
-    public function testDestroyingTask(): void
+    public function testDestroy(): void
     {
         $task = new Task($this->taskData);
-        $task->save();
+        $task = Task::factory($this->taskData)->create();
 
         $response = $this
             ->actingAs($this->actingUser)
@@ -85,10 +109,9 @@ class TasksTest extends TestCase
         $this->assertDatabaseMissing('tasks', $this->taskData);
     }
 
-    public function testDestroyingTaskNotByCreator(): void
+    public function testDestroyNotByCreator(): void
     {
-        $task = new Task($this->taskData);
-        $task->save();
+        $task = Task::factory($this->taskData)->create();
         $testUser = User::factory()->create();
 
         $response = $this

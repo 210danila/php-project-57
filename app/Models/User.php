@@ -2,28 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\{HasMany};
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
-
-    public function createdTasks(): hasMany
-    {
-        return $this->hasMany(Task::class, 'created_by_id');
-    }
-
-    public function assignedTasks(): hasMany
-    {
-        return $this->hasMany(Task::class, 'assigned_to_id');
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -55,4 +44,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function createdTasks(): hasMany
+    {
+        return $this->hasMany(Task::class, 'created_by_id');
+    }
+
+    public function assignedTasks(): hasMany
+    {
+        return $this->hasMany(Task::class, 'assigned_to_id');
+    }
 }

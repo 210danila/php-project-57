@@ -2,14 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\{User, Task, Label, TaskStatus};
+use App\Models\{User, Task, Label};
 
-class LabelsTest extends TestCase
+class LabelTest extends TestCase
 {
-    use RefreshDatabase;
-
     private User $actingUser;
 
     public function setUp(): void
@@ -18,17 +15,45 @@ class LabelsTest extends TestCase
         $this->actingUser = User::factory()->create();
     }
 
-    public function testCreatingLabel(): void
+    public function testIndex(): Void
+    {
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('labels.index'));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testCreate(): Void
+    {
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('labels.create'));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testEdit(): Void
+    {
+        $testLabel = Label::factory()->create();
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('labels.edit', $testLabel));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testStore(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
             ->post(route('labels.store'), ['name' => "newTestLabel"]);
-
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('labels.index'));
         $this->assertDatabaseHas('labels', ['name' => 'newTestLabel']);
     }
 
-    public function testCreatingLabelByGuest(): void
+    public function testStoreAsGuest(): void
     {
         $response = $this->post(route('labels.store'), ['name' => "newTestLabel"]);
 
@@ -36,7 +61,7 @@ class LabelsTest extends TestCase
         $this->assertDatabaseMissing('labels', ['name' => 'newTestLabel']);
     }
 
-    public function testEditingLabel(): void
+    public function testUpdate(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this
@@ -45,11 +70,12 @@ class LabelsTest extends TestCase
                 'name' => "editedTestLabel"
             ]);
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('labels.index'));
         $this->assertDatabaseHas('labels', ['name' => 'editedTestLabel']);
     }
 
-    public function testEditingLabelByGuest(): void
+    public function testUpdateAsGuest(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this->patch(route('labels.update', $testLabel), ['name' => "editedTestLabel"]);
@@ -58,18 +84,19 @@ class LabelsTest extends TestCase
         $this->assertDatabaseMissing('labels', ['name' => 'editedTestLabel']);
     }
 
-    public function testDestroyingLabel(): void
+    public function testDestroy(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this
             ->actingAs($this->actingUser)
             ->delete(route('labels.destroy', $testLabel));
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('labels.index'));
         $this->assertDatabaseMissing('labels', ['name' => $testLabel->name]);
     }
 
-    public function testDestroyingLabelByGuest(): void
+    public function testDestroyAsGuest(): void
     {
         $testLabel = Label::factory()->create();
         $response = $this->delete(route('labels.destroy', $testLabel));
@@ -78,19 +105,11 @@ class LabelsTest extends TestCase
         $this->assertDatabaseHas('labels', ['name' => $testLabel->name]);
     }
 
-    public function testDestroyingBoundedWithTaskLabel(): void
+    public function testDestroyBoundedWithTaskLabel(): void
     {
-        $testLabel = Label::factory()->create();
-        $status = TaskStatus::factory()->create();
-        $task = new Task([
-            'name' => 'testTask',
-            'status_id' => $status->id,
-            'created_by_id' => $this->actingUser->id
-        ]);
-        $task->save();
-        $task->labels()->attach($testLabel->id);
-
+        $testLabel = Label::factory()->hasTasks(1)->create();
         $response = $this
+            ->from(route('labels.index'))
             ->actingAs($this->actingUser)
             ->delete(route('labels.destroy', $testLabel));
 

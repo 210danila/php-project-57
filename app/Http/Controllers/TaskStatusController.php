@@ -13,8 +13,8 @@ class TaskStatusController extends Controller
      */
     public function index()
     {
-        $statuses = TaskStatus::all();
-        return view('statuses.index', compact('statuses'));
+        $statuses = TaskStatus::paginate(15);
+        return view('task_statuses.index', compact('statuses'));
     }
 
     /**
@@ -22,9 +22,9 @@ class TaskStatusController extends Controller
      */
     public function create()
     {
-        Gate::authorize('status');
+        $this->authorize('create', TaskStatus::class);
         $task_status = new TaskStatus();
-        return view('statuses.create', compact('task_status'));
+        return view('task_statuses.create', compact('task_status'));
     }
 
     /**
@@ -45,8 +45,8 @@ class TaskStatusController extends Controller
      */
     public function edit(TaskStatus $task_status)
     {
-        Gate::authorize('status');
-        return view('statuses.edit', compact('task_status'));
+        Gate::authorize('update', TaskStatus::class);
+        return view('task_statuses.edit', compact('task_status'));
     }
 
     /**
@@ -67,7 +67,7 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $task_status)
     {
-        Gate::authorize('status');
+        Gate::authorize('delete', TaskStatus::class);
         if ($task_status->tasks()->exists()) {
             flash(__('flash.status_not_deleted'))->error();
             return back();

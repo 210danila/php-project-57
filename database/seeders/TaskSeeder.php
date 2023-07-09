@@ -7,7 +7,7 @@ use App\Models\Task;
 
 class TaskSeeder extends Seeder
 {
-    public const FAKE_DATA = [
+    public const FAKE_NAMES_AND_DESCRIPRIONS = [
         ['name' => 'Исправить ошибку в какой-нибудь строке', 'description' => 'Я тут ошибку нашёл, надо бы её исправить и так далее и так далее'],
         ['name' => 'Допилить дизайн главной страницы', 'description' => 'Вёрстка поехала в далёкие края. Нужно удалить бутстрап!'],
         ['name' => 'Отрефакторить авторизацию', 'description' => 'Выпилить всё легаси, которое найдёшь'],
@@ -31,8 +31,13 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (self::FAKE_DATA as $fakeElement) {
-            Task::factory($fakeElement)->create();
+        foreach (self::FAKE_NAMES_AND_DESCRIPRIONS as $fakeNameAndDesc) {
+            $fakeData = array_merge($fakeNameAndDesc, [
+                'status_id' => random_int(1, 4),
+                'created_by_id' => random_int(1, 16),
+                'assigned_to_id' => random_int(1, 15)
+            ]);
+            Task::factory($fakeData)->create();
         }
     }
 }

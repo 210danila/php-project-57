@@ -4,9 +4,8 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use App\Models\Task;
-use App\Models\User;
-use Illuminate\Support\Facades\{Gate};
+use App\Models\{Task, TaskStatus, Label};
+use App\Policies\{TaskPolicy, TaskStatusPolicy, LabelPolicy};
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,7 +15,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        Task::class => TaskPolicy::class,
+        TaskStatus::class => TaskStatusPolicy::class,
+        Label::class => LabelPolicy::class,
     ];
 
     /**
@@ -25,21 +26,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
-
-        Gate::define('status', function (User $user) {
-            return true;
-        });
-
-        Gate::define('label', function (User $user) {
-            return true;
-        });
-
-        Gate::define(('store-or-update-task'), function (User $user) {
-            return true;
-        });
-
-        Gate::define(('delete-task'), function (User $user, Task $task) {
-            return $user->id === $task->createdBy->id;
-        });
     }
 }

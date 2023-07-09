@@ -2,14 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\{TaskStatus, User, Task};
 
-class TaskStatusesTest extends TestCase
+class TaskStatusTest extends TestCase
 {
-    use RefreshDatabase;
-
     private User $actingUser;
 
     public function setUp(): void
@@ -18,17 +15,46 @@ class TaskStatusesTest extends TestCase
         $this->actingUser = User::factory()->create();
     }
 
-    public function testCreatingStatus(): void
+    public function testIndex(): Void
+    {
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('task_statuses.index'));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testCreate(): Void
+    {
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('task_statuses.create'));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testEdit(): Void
+    {
+        $testLabel = TaskStatus::factory()->create();
+        $response = $this
+            ->actingAs($this->actingUser)
+            ->get(route('task_statuses.edit', $testLabel));
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertStatus(200);
+    }
+
+    public function testStore(): void
     {
         $response = $this
             ->actingAs($this->actingUser)
             ->post(route('task_statuses.store'), ['name' => "newTestStatus"]);
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('task_statuses.index'));
         $this->assertDatabaseHas('task_statuses', ['name' => 'newTestStatus']);
     }
 
-    public function testCreatingStatusByGuest(): void
+    public function testStoreAsGuest(): void
     {
         $response = $this->post(route('task_statuses.store'), ['name' => "newTestStatus"]);
 
@@ -36,7 +62,7 @@ class TaskStatusesTest extends TestCase
         $this->assertDatabaseMissing('task_statuses', ['name' => 'newTestStatus']);
     }
 
-    public function testEditingStatus(): void
+    public function testUpdate(): void
     {
         $testStatus = TaskStatus::factory()->create();
         $response = $this
@@ -45,11 +71,12 @@ class TaskStatusesTest extends TestCase
                 'name' => "editedTestStatus"
             ]);
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('task_statuses.index'));
         $this->assertDatabaseHas('task_statuses', ['name' => 'editedTestStatus']);
     }
 
-    public function testEditingStatusByGuest(): void
+    public function testUpdateAsGuest(): void
     {
         $testStatus = TaskStatus::factory()->create();
         $response = $this->patch(route('task_statuses.update', $testStatus), [
@@ -60,18 +87,19 @@ class TaskStatusesTest extends TestCase
         $this->assertDatabaseMissing('task_statuses', ['name' => 'editedTestStatus']);
     }
 
-    public function testDestroyingStatus(): void
+    public function testDestroy(): void
     {
         $testStatus = TaskStatus::factory()->create();
         $response = $this
             ->actingAs($this->actingUser)
             ->delete(route('task_statuses.destroy', $testStatus));
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('task_statuses.index'));
         $this->assertDatabaseMissing('task_statuses', ['name' => $testStatus->name]);
     }
 
-    public function testDestroyingStatusByGuest(): void
+    public function testDestroyAsGuest(): void
     {
         $testStatus = TaskStatus::factory()->create();
         $response = $this->delete(route('task_statuses.destroy', $testStatus));
@@ -80,17 +108,11 @@ class TaskStatusesTest extends TestCase
         $this->assertDatabaseHas('task_statuses', ['name' => $testStatus->name]);
     }
 
-    public function testDestroyingBoundedWithTaskStatus(): void
+    public function testDestroyBoundedWithTaskStatus(): void
     {
-        $testStatus = TaskStatus::factory()->create();
-        $task = new Task([
-            'name' => 'testTask',
-            'status_id' => $testStatus->id,
-            'created_by_id' => $this->actingUser->id
-        ]);
-        $task->save();
-
+        $testStatus = TaskStatus::factory()->has(Task::factory(), 'tasks')->create();
         $response = $this
+            ->from(route('task_statuses.index'))
             ->actingAs($this->actingUser)
             ->delete(route('task_statuses.destroy', $testStatus));
 

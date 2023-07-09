@@ -4,16 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
-use App\Models\Label;
 
-class LabelRequest extends FormRequest
+class TaskStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('create', Label::class) && Gate::allows('update', Label::class);
+        return Gate::allows('create', Task::class);
     }
 
     /**
@@ -24,8 +23,11 @@ class LabelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:labels',
-            'description' => 'nullable'
+            'name' => 'required|unique:tasks',
+            'description' => 'nullable',
+            'status_id' => 'required|exists:task_statuses,id',
+            'assigned_to_id' => 'nullable',
+            'labels' => 'nullable|array'
         ];
     }
 
@@ -38,7 +40,8 @@ class LabelRequest extends FormRequest
     {
         return [
             'name.required' => __('Это обязательное поле'),
-            'name.unique' => __('Метка с таким именем уже существует'),
+            'name.unique' => __('Задача с таким именем уже существует'),
+            'status_id.required' => __('Это обязательное поле')
         ];
     }
 }

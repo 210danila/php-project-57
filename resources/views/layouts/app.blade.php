@@ -15,7 +15,7 @@
     <body>
         <div id="app">
             <header class="fixed w-full">
-                @include('layouts.navigation')
+                @include('components.navigation')
             </header>
             <!-- Page Content -->
             <section class="bg-white dark:bg-gray-900">
