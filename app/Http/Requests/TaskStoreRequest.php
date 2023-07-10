@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Task;
 
 class TaskStoreRequest extends FormRequest
 {

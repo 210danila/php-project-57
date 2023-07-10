@@ -29,6 +29,9 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task): bool
     {
+        if (is_null($user)) {
+            return false;
+        }
         return $user->id === $task->createdBy->id;
     }
 }
