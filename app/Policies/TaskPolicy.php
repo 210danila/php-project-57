@@ -29,7 +29,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task): bool
     {
-        if (Auth::guest()) {
+        if (is_null($task->createdBy)) {
             return false;
         }
         return $user->id === $task->createdBy->id;
