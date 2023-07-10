@@ -9,15 +9,21 @@ class TaskTest extends TestCase
 {
     private User $actingUser;
     private TaskStatus $status;
-    private array $taskData;
+    private array $dataForStoring;
+    private array $dataForUpdating;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->actingUser = User::factory()->create();
         $this->status = TaskStatus::factory()->create();
-        $this->taskData = [
-            'name' => 'TestName',
+        $this->dataForStoring = [
+            'name' => 'newTask',
+            'status_id' => $this->status->id,
+            'created_by_id' => $this->actingUser->id
+        ];
+        $this->dataForUpdating = [
+            'name' => 'updatedTask1',
             'status_id' => $this->status->id,
             'created_by_id' => $this->actingUser->id
         ];
@@ -28,6 +34,7 @@ class TaskTest extends TestCase
         $response = $this
             ->actingAs($this->actingUser)
             ->get(route('tasks.index'));
+
         $response->assertSessionDoesntHaveErrors();
         $response->assertStatus(200);
     }
@@ -37,6 +44,7 @@ class TaskTest extends TestCase
         $response = $this
             ->actingAs($this->actingUser)
             ->get(route('tasks.create'));
+
         $response->assertSessionDoesntHaveErrors();
         $response->assertStatus(200);
     }
@@ -47,6 +55,7 @@ class TaskTest extends TestCase
         $response = $this
             ->actingAs($this->actingUser)
             ->get(route('tasks.edit', $testTask));
+
         $response->assertSessionDoesntHaveErrors();
         $response->assertStatus(200);
     }
@@ -55,70 +64,66 @@ class TaskTest extends TestCase
     {
         $response = $this
             ->actingAs($this->actingUser)
-            ->post(route('tasks.store'), $this->taskData);
+            ->post(route('tasks.store'), $this->dataForStoring);
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('tasks.index'));
-        $this->assertDatabaseHas('tasks', $this->taskData);
+        $this->assertDatabaseHas('tasks', $this->dataForStoring);
     }
 
     public function testStoreAsGuest(): void
     {
         $response = $this
-            ->post(route('tasks.store'), $this->taskData);
+            ->post(route('tasks.store'), $this->dataForStoring);
 
         $response->assertStatus(403);
-        $this->assertDatabaseMissing('tasks', $this->taskData);
+        $this->assertDatabaseMissing('tasks', $this->dataForStoring);
     }
 
     public function testUpdate(): void
     {
-        $task = Task::factory($this->taskData)->create();
-        $this->taskData['name'] = 'newTaskName';
-
+        $task = Task::factory($this->dataForStoring)->create();
         $response = $this
             ->actingAs($this->actingUser)
-            ->patch(route('tasks.update', ['task' => $task]), $this->taskData);
+            ->patch(route('tasks.update', ['task' => $task]), $this->dataForUpdating);
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('tasks.index'));
-        $this->assertDatabaseHas('tasks', $this->taskData);
+        $this->assertDatabaseHas('tasks', $this->dataForUpdating);
     }
 
     public function testUpdateAsGuest(): void
     {
-        $task = new Task($this->taskData);
-        $task->save();
-        $this->taskData['name'] = 'newTaskName2';
-
+        $task = Task::factory($this->dataForStoring)->create();
         $response = $this
-            ->patch(route('tasks.update', ['task' => $task]), $this->taskData);
+            ->patch(route('tasks.update', ['task' => $task]), $this->dataForUpdating);
 
         $response->assertStatus(403);
-        $this->assertDatabaseMissing('tasks', $this->taskData);
+        $this->assertDatabaseMissing('tasks', $this->dataForUpdating);
     }
 
     public function testDestroy(): void
     {
-        $task = new Task($this->taskData);
-        $task = Task::factory($this->taskData)->create();
-
+        $task = Task::factory($this->dataForStoring)->create();
         $response = $this
             ->actingAs($this->actingUser)
             ->delete(route('tasks.destroy', ['task' => $task]));
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('tasks.index'));
-        $this->assertDatabaseMissing('tasks', $this->taskData);
+        $this->assertDatabaseMissing('tasks', $this->dataForStoring);
     }
 
     public function testDestroyNotByCreator(): void
     {
-        $task = Task::factory($this->taskData)->create();
+        $task = Task::factory($this->dataForStoring)->create();
         $testUser = User::factory()->create();
-
         $response = $this
             ->actingAs($testUser)
             ->delete(route('tasks.destroy', ['task' => $task]));
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertStatus(403);
-        $this->assertDatabaseHas('tasks', $this->taskData);
+        $this->assertDatabaseHas('tasks', $this->dataForStoring);
     }
 }

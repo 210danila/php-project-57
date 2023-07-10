@@ -3,12 +3,12 @@
 @section('content')
 
 <div class="grid col-span-full">
-    <h1 class="mb-5">@lang('Метки')</h1>
+    <h1 class="mb-5">@lang('views.labels.labels')</h1>
 
     <div>
         @can('create', 'App\Models\Label')
             <a href="{{ route('labels.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                @lang('Создать метку')
+                @lang('views.labels.create')
             </a>
         @endcan
     </div>
@@ -16,10 +16,13 @@
     <table class="mt-4">
         <thead class="border-b-2 border-solid border-black text-left">
             <tr>
-                <th>@lang('ID')</th>
-                <th>@lang('Имя')</th>
-                <th>@lang('Описание')</th>
-                <th>@lang('Дата создания')</th>
+                <th>ID</th>
+                <th>@lang('views.labels.name')</th>
+                <th>@lang('views.labels.description')</th>
+                <th>@lang('views.common.created_at')</th>
+                @can('update', 'App\Models\Label')
+                    <th>@lang('views.common.actions')</th>
+                @endcan
             </tr>
         </thead>
         <tbody>
@@ -31,13 +34,13 @@
                     <td>{{ $label->created_at->format('d.m.Y') }}</td>
                     <td>
                         @can('delete', 'App\Models\Label')
-                            <a data-confirm="Вы уверены?" data-method="delete" class="text-red-600 hover:text-red-900" href="{{ route('labels.destroy', $label) }}">
-                                @lang('Удалить')
+                            <a data-confirm="{{ __('views.common.are_you_sure' ) }}" data-method="delete" class="text-red-600 hover:text-red-900" href="{{ route('labels.destroy', $label) }}">
+                                @lang('views.common.delete')
                             </a>
                         @endcan
                         @can('update', 'App\Models\Label')
                             <a class="text-blue-600 hover:text-blue-900" href="{{ route('labels.edit', ['label' => $label]) }}">
-                                @lang('Изменить')
+                                @lang('views.common.edit')
                             </a>
                         @endcan
                     </td>

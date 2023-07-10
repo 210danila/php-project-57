@@ -18,7 +18,7 @@ Route::view('/', 'welcome')->name('root');
 
 Route::resources([
     'task_statuses' => TaskStatusController::class,
-    'labels' => labelController::class,
+    'labels' => LabelController::class,
     'tasks' => TaskController::class,
 ]);
 

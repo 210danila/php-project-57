@@ -14,7 +14,13 @@ return [
     */
 
     'failed' => 'Введите правильные имя пользователя и пароль',
-    'password' => 'The provided password is incorrect.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'password' => 'Пароль',
+    'remember_me' => 'Запомнить меня',
+    'forgot_password' => 'Забыли пароль?',
+    'login' => 'Войти',
+    'name' => 'Имя',
+    'confirmation' => 'Подтверждение',
+    'already_registered' => 'Уже зарегистрированы?',
+    'register' => 'Зарегистрировать',
 
 ];

@@ -8,11 +8,15 @@ use App\Models\{TaskStatus, User, Task};
 class TaskStatusTest extends TestCase
 {
     private User $actingUser;
+    private array $dataForStoring;
+    private array $dataForUpdating;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->actingUser = User::factory()->create();
+        $this->dataForStoring = ['name' => "newTaskStatus"];
+        $this->dataForUpdating = ['name' => 'updatedTaskStatus'];
     }
 
     public function testIndex(): void
@@ -20,6 +24,7 @@ class TaskStatusTest extends TestCase
         $response = $this
             ->actingAs($this->actingUser)
             ->get(route('task_statuses.index'));
+
         $response->assertSessionDoesntHaveErrors();
         $response->assertStatus(200);
     }
@@ -29,6 +34,7 @@ class TaskStatusTest extends TestCase
         $response = $this
             ->actingAs($this->actingUser)
             ->get(route('task_statuses.create'));
+
         $response->assertSessionDoesntHaveErrors();
         $response->assertStatus(200);
     }
@@ -39,6 +45,7 @@ class TaskStatusTest extends TestCase
         $response = $this
             ->actingAs($this->actingUser)
             ->get(route('task_statuses.edit', $testLabel));
+
         $response->assertSessionDoesntHaveErrors();
         $response->assertStatus(200);
     }
@@ -47,7 +54,7 @@ class TaskStatusTest extends TestCase
     {
         $response = $this
             ->actingAs($this->actingUser)
-            ->post(route('task_statuses.store'), ['name' => "newTestStatus"]);
+            ->post(route('task_statuses.store'), $this->dataForStoring);
 
         $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('task_statuses.index'));
@@ -56,10 +63,10 @@ class TaskStatusTest extends TestCase
 
     public function testStoreAsGuest(): void
     {
-        $response = $this->post(route('task_statuses.store'), ['name' => "newTestStatus"]);
+        $response = $this->post(route('task_statuses.store'), $this->dataForStoring);
 
         $response->assertStatus(403);
-        $this->assertDatabaseMissing('task_statuses', ['name' => 'newTestStatus']);
+        $this->assertDatabaseMissing('task_statuses', $this->dataForStoring);
     }
 
     public function testUpdate(): void
@@ -67,24 +74,20 @@ class TaskStatusTest extends TestCase
         $testStatus = TaskStatus::factory()->create();
         $response = $this
             ->actingAs($this->actingUser)
-            ->patch(route('task_statuses.update', $testStatus), [
-                'name' => "editedTestStatus"
-            ]);
+            ->patch(route('task_statuses.update', $testStatus), $this->dataForUpdating);
 
         $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('task_statuses.index'));
-        $this->assertDatabaseHas('task_statuses', ['name' => 'editedTestStatus']);
+        $this->assertDatabaseHas('task_statuses', $this->dataForUpdating);
     }
 
     public function testUpdateAsGuest(): void
     {
         $testStatus = TaskStatus::factory()->create();
-        $response = $this->patch(route('task_statuses.update', $testStatus), [
-            'name' => "editedTestStatus"
-        ]);
+        $response = $this->patch(route('task_statuses.update', $testStatus), $this->dataForUpdating);
 
         $response->assertStatus(403);
-        $this->assertDatabaseMissing('task_statuses', ['name' => 'editedTestStatus']);
+        $this->assertDatabaseMissing('task_statuses', $this->dataForUpdating);
     }
 
     public function testDestroy(): void
@@ -116,6 +119,7 @@ class TaskStatusTest extends TestCase
             ->actingAs($this->actingUser)
             ->delete(route('task_statuses.destroy', $testStatus));
 
+        $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('task_statuses.index'));
         $this->assertDatabaseHas('task_statuses', ['name' => $testStatus->name]);
     }

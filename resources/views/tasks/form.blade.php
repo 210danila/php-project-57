@@ -1,5 +1,5 @@
 <div>
-    {{ Form::label('name', __('Имя')) }}
+    {{ Form::label('name', __('views.tasks.name')) }}
 </div>
 <div class="mt-2">
     {{ Form::text('name', null, ['class' => 'rounded border-gray-300 w-1/3', 'id' => 'name']) }}
@@ -10,7 +10,7 @@
     @endif
 </div>
 <div>
-    {{ Form::label('description', __('Описание')) }}
+    {{ Form::label('description', __('views.tasks.description')) }}
 </div>
 <div class="mt-2">
     {{ Form::textarea('description', null, ['class' => 'rounded border-gray-300 w-1/3 h-32', 'cols' => 50, 'rows' => 10, 'id' => 'description']) }}
@@ -21,7 +21,7 @@
     @endif
 </div>
 <div>
-    {{ Form::label('status_id', __('Статус')) }}
+    {{ Form::label('status_id', __('views.tasks.status')) }}
 </div>
 <div class='mt-2'>
     {{ Form::select('status_id', $statuses, null, ['placeholder' => '----------', 'class' => 'rounded border-gray-300 w-1/3']) }}
@@ -32,7 +32,7 @@
     @endif
 </div>
 <div>
-    {{ Form::label('assigned_to_id', __('Исполнитель')) }}
+    {{ Form::label('assigned_to_id', __('views.tasks.performer')) }}
 </div>
 <div class='mt-2'>
     {{ Form::select('assigned_to_id', $users, null, ['placeholder' => '----------', 'class' => 'rounded border-gray-300 w-1/3', 'id' => 'assigned_to_id']) }}
@@ -43,7 +43,7 @@
     @endif
 </div>
 <div>
-    {{ Form::label('labels', __('Метки')) }}
+    {{ Form::label('labels', __('views.tasks.labels')) }}
 </div>
 <div>
     {{ Form::select('labels[]', $allLabels, empty($selectedLabels) ? '' : $selectedLabels, ['placeholder' => '', 'multiple' => 'multiple', 'class' => 'rounded border-gray-300 w-1/3 h-32']) }}
