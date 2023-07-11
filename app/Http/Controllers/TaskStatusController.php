@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaskStatus;
-use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\TaskStatusRequest;
 
 class TaskStatusController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(TaskStatus::class, 'taskStatus');
+        $this->authorizeResource(TaskStatus::class, 'task_status');
     }
 
     /**
