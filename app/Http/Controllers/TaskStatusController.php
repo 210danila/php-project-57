@@ -8,6 +8,11 @@ use App\Http\Requests\TaskStatusRequest;
 
 class TaskStatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(TaskStatus::class, 'taskStatus');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -22,7 +27,6 @@ class TaskStatusController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', TaskStatus::class);
         $task_status = new TaskStatus();
         return view('task_statuses.create', compact('task_status'));
     }
@@ -45,7 +49,6 @@ class TaskStatusController extends Controller
      */
     public function edit(TaskStatus $task_status)
     {
-        Gate::authorize('update', TaskStatus::class);
         return view('task_statuses.edit', compact('task_status'));
     }
 
@@ -67,7 +70,6 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $task_status)
     {
-        Gate::authorize('delete', TaskStatus::class);
         if ($task_status->tasks()->exists()) {
             flash(__('flash.status_not_deleted'))->error();
             return back();

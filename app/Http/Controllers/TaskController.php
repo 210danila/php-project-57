@@ -5,18 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\{Task, TaskStatus, User, Label};
 use Illuminate\Http\Request;
 use App\Http\Requests\{TaskStoreRequest, TaskUpdateRequest};
-use Illuminate\Support\Facades\{Auth, Gate, DB};
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Task::class, 'task');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $filterQueries = $request->query('filter');
+        $filters = $request->query('filter');
         $statuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id');
 
@@ -28,7 +33,7 @@ class TaskController extends Controller
             ])
             ->orderBy('id')
             ->paginate(15);
-        return view('tasks.index', compact('statuses', 'users', 'filterQueries', 'tasks'));
+        return view('tasks.index', compact('statuses', 'users', 'filters', 'tasks'));
     }
 
     /**
@@ -36,7 +41,6 @@ class TaskController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create', Task::class);
         $task = new Task();
         $statuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id');
@@ -75,7 +79,6 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        Gate::authorize('update', Task::class);
         $statuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id')->all();
         $allLabels = Label::pluck('name', 'id');
@@ -106,7 +109,6 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        Gate::authorize('delete', $task);
         $task->delete();
         flash(__('flash.task_deleted'))->success();
         return redirect()->route('tasks.index');

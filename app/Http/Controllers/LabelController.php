@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Label;
-use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\LabelRequest;
 
 class LabelController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Label::class, 'label');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -22,7 +26,6 @@ class LabelController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create', Label::class);
         $label = new Label();
         return view('labels.create', compact('label'));
     }
@@ -45,7 +48,6 @@ class LabelController extends Controller
      */
     public function edit(Label $label)
     {
-        Gate::authorize('update', Label::class);
         return view('labels.edit', compact('label'));
     }
 
@@ -67,7 +69,6 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
-        Gate::authorize('delete', Label::class);
         if ($label->tasks()->exists()) {
             flash(__('flash.label_not_deleted'))->error();
             return back();

@@ -6,16 +6,16 @@
    <h1 class="mb-5">@lang('views.tasks.tasks')</h1>
    <div class="w-full flex items-center">
       <div>
-         {{ Form::model($filterQueries, ['route' => ['tasks.index'], 'method' => 'GET']) }}
+         {{ Form::model($filters, ['route' => ['tasks.index'], 'method' => 'GET']) }}
             <div class="flex">
                <div>
-                  {{ Form::select('filter[status_id]', $statuses, $filterQueries['status_id'] ?? null, ['placeholder' => __('views.tasks.status'), 'class' => 'rounded border-gray-300']) }}
+                  {{ Form::select('filter[status_id]', $statuses, $filters['status_id'] ?? null, ['placeholder' => __('views.tasks.status'), 'class' => 'rounded border-gray-300']) }}
                </div>
                <div>
-                  {{ Form::select('filter[created_by_id]', $users, $filterQueries['created_by_id'] ?? null, ['placeholder' => __('views.tasks.author'), 'class' => 'ml-2 rounded border-gray-300']) }}
+                  {{ Form::select('filter[created_by_id]', $users, $filters['created_by_id'] ?? null, ['placeholder' => __('views.tasks.author'), 'class' => 'ml-2 rounded border-gray-300']) }}
                </div>
                <div>
-                  {{ Form::select('filter[assigned_to_id]', $users, $filterQueries['assigned_to_id'] ?? null, ['placeholder' => __('views.tasks.performer'), 'class' => 'ml-2 rounded border-gray-300']) }}
+                  {{ Form::select('filter[assigned_to_id]', $users, $filters['assigned_to_id'] ?? null, ['placeholder' => __('views.tasks.performer'), 'class' => 'ml-2 rounded border-gray-300']) }}
                </div>
                <div>
                   {{ Form::submit(__('views.tasks.apply'), ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2'])}}
