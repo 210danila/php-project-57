@@ -27,7 +27,7 @@ class TaskUpdateRequest extends FormRequest
             return [];
         }
         return [
-            'name' => 'required|unique:tasks,name,' . $this->route('task')->id,
+            'name' => 'required|max:255|unique:tasks,name,' . $this->route('task')->id,
             'description' => 'nullable',
             'status_id' => 'required|exists:task_statuses,id',
             'assigned_to_id' => 'nullable',
@@ -44,6 +44,7 @@ class TaskUpdateRequest extends FormRequest
     {
         return [
             'name.required' => __('Это обязательное поле'),
+            'name.max' => __('Длина имени задачи не должна превышать 255 символов'),
             'name.unique' => __('Задача с таким именем уже существует'),
             'status_id.required' => __('Это обязательное поле')
         ];

@@ -24,7 +24,7 @@ class TaskStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:tasks',
+            'name' => 'required|max:255|unique:tasks',
             'description' => 'nullable',
             'status_id' => 'required|exists:task_statuses,id',
             'assigned_to_id' => 'nullable',
@@ -42,7 +42,8 @@ class TaskStoreRequest extends FormRequest
         return [
             'name.required' => __('Это обязательное поле'),
             'name.unique' => __('Задача с таким именем уже существует'),
-            'status_id.required' => __('Это обязательное поле')
+            'name.max' => __('Длина задачи не должна превышать 255 символов'),
+            'status_id.required' => __('Это обязательное поле'),
         ];
     }
 }
