@@ -23,6 +23,7 @@ return [
     'common.login' => 'Вход',
     'common.registration' => 'Регистрация',
     'common.logout' => 'Выйти',
+    'common.reset_password' => 'Сбросить пароль',
 
     'tasks.tasks' => 'Задачи',
     'tasks.create' => 'Создать задачу',
