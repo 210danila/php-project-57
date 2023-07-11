@@ -31,7 +31,7 @@
                     <td>{{ $task_status->created_at->format('d.m.Y') }}</td>
                     <td>
                         @can('delete', 'App\Models\TaskStatus')
-                            <a data-confirm="views.common.are_you_sure?" data-method="delete" class="text-red-600 hover:text-red-900" href="{{ route('task_statuses.destroy', $task_status) }}">
+                            <a data-confirm="{{ __('views.common.are_you_sure') }}" data-method="delete" class="text-red-600 hover:text-red-900" href="{{ route('task_statuses.destroy', $task_status) }}">
                                 @lang('views.common.delete')
                             </a>
                         @endcan
