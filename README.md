@@ -23,10 +23,9 @@ __Иструкция по установке:__
 - Установите зависимости комндой:
 > make setup
 - Установите значение переменной DATABASE_URL в файле .env формата:
-  _postgresql://{user}:{password}@{host}:{port}/{db}_
 
-  Например: 
-> export DATABASE_URL=postgresql://username:mypassword@localhost:5432/mydb
+> postgresql://{user}:{password}@{host}:{port}/{db}
+
 - Запустите проект с помощью команды:
 > make start
 
