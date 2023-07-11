@@ -22,7 +22,7 @@ return [
     'common.actions' => 'Действия',
     'common.login' => 'Вход',
     'common.registration' => 'Регистрация',
-    'common.logout' => 'Выйти',
+    'common.logout' => 'Выход',
     'common.reset_password' => 'Сбросить пароль',
 
     'tasks.tasks' => 'Задачи',
