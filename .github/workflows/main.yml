@@ -39,7 +39,7 @@ jobs:
       run: vendor/bin/phpunit tests/
     - name: Run linter
       # Run Linter
-      run: make lint
+      run: composer exec --verbose phpcs -- --standard=PSR12 app routes
       # Publish code coverage on Code Climate
       # https://github.com/paambaati/codeclimate-action
     - name: Run test & publish code coverage
@@ -48,6 +48,6 @@ jobs:
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       with:
-        coverageCommand: make test-coverage
+        coverageCommand: composer exec --verbose phpunit tests -- --coverage-clover storage/logs/clover.xml
         coverageLocations: ${{github.workplace}}/storage/logs/clover.xml:clover
         debug: true
