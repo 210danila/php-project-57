@@ -40,3 +40,53 @@ jobs:
           coverageCommand: make test-coverage
           coverageLocations: ${{github.workplace}}/storage/logs/clover.xml:clover
           debug: true
+
+on: push
+name: CI
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:7.3
+ 
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+        - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+ 
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+ 
+    - name: Install composer dependencies
+      run: |
+        composer install --no-scripts
+ 
+    - name: Prepare Laravel Application
+      run: |
+        cp .env.ci .env
+        php artisan key:generate
+ 
+    - name: Run Testsuite
+      run: vendor/bin/phpunit tests/
+    - name: Run linter
+      # Run Linter
+      run: make lint
+      # Publish code coverage on Code Climate
+      # https://github.com/paambaati/codeclimate-action
+    - name: Run test & publish code coverage
+      uses: paambaati/codeclimate-action@v2.6.0
+      # Add Code Climate secret key
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      with:
+        coverageCommand: make test-coverage
+        coverageLocations: ${{github.workplace}}/storage/logs/clover.xml:clover
+        debug: true
