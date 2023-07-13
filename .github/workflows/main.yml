@@ -5,9 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.1
- 
-    env:
-      LARAVEL_BYPASS_ENV_CHECK: 1
     services:
       postgres:
         image: postgres:10.8
@@ -31,7 +28,7 @@ jobs:
     - name: Install NPM dependencies
       run: npm install
     - name: Minify CSS and JS files
-      run: npm run dev
+      run: npm run build
 
     - name: Prepare Laravel Application
       run: |
