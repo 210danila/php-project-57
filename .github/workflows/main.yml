@@ -27,7 +27,7 @@ jobs:
         composer install --no-scripts
 
     - name: Install front-end dependencies
-      run: |
+      run:
         npm install
 	      npm run prod
  
