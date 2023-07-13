@@ -48,6 +48,6 @@ jobs:
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       with:
-        coverageCommand: composer exec --verbose phpunit tests -- --coverage-clover storage/logs/clover.xml
+        coverageCommand: make test-coverage
         coverageLocations: ${{github.workplace}}/storage/logs/clover.xml:clover
         debug: true
