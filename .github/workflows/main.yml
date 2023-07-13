@@ -28,7 +28,6 @@ jobs:
 
     - name: Install front-end dependencies
       run:
-        npm install
 	      npm run prod
  
     - name: Prepare Laravel Application
