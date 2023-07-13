@@ -6,6 +6,8 @@ jobs:
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.1
  
+    env:
+      LARAVEL_BYPASS_ENV_CHECK: 1
     services:
       postgres:
         image: postgres:10.8
@@ -13,7 +15,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: test
-          LARAVEL_BYPASS_ENV_CHECK: 1
         ports:
         - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
