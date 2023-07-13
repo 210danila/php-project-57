@@ -26,10 +26,11 @@ jobs:
       run: |
         composer install --no-scripts
 
-    - name: Install front-end dependencies
-      run:
-	      npm run prod
- 
+    - name: Install NPM dependencies
+      run: npm install
+    - name: Minify CSS and JS files
+      run: npm run prod
+
     - name: Prepare Laravel Application
       run: |
         cp .env.example .env
