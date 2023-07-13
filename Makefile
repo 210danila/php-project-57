@@ -29,4 +29,4 @@ tests:
 	php artisan test
 
 test-coverage:
-	composer exec --verbose phpunit tests -- --coverage-clover storage/logs/clover.xml	
+	composer exec --verbose phpunit tests -- --coverage-clover storage/logs/clover.xml

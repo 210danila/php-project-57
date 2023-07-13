@@ -58,7 +58,7 @@ class TaskStatusTest extends TestCase
 
         $response->assertSessionDoesntHaveErrors();
         $response->assertRedirect(route('task_statuses.index'));
-        $this->assertDatabaseHas('task_statuses', ['name' => 'newTestStatus']);
+        $this->assertDatabaseHas('task_statuses', $this->dataForStoring);
     }
 
     public function testStoreAsGuest(): void
