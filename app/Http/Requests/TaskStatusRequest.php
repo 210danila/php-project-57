@@ -24,7 +24,7 @@ class TaskStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'unique:task_statuses']
+            'name' => ['required|max:255', 'unique:task_statuses']
         ];
     }
 
@@ -38,6 +38,7 @@ class TaskStatusRequest extends FormRequest
         return [
             'name.required' => __('Это обязательное поле'),
             'name.unique' => __('Статус с таким именем уже существует'),
+            'name.max' => __('Длина имени статуса не должна превышать 255 символов'),
         ];
     }
 }

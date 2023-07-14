@@ -1,8 +1,10 @@
 # Менеджер Задач
 
 ### Hexlet tests and linter status:
-[![Actions Status](https://github.com/210danila/php-project-57/workflows/hexlet-check/badge.svg)](https://github.com/210danila/php-project-57/actions)
+[![hexlet-check](https://github.com/210danila/php-project-57/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/210danila/php-project-57/actions/workflows/hexlet-check.yml)
+[![CI](https://github.com/210danila/php-project-57/actions/workflows/main.yml/badge.svg)](https://github.com/210danila/php-project-57/actions/workflows/main.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f3b63cc7aa1af7e4e153/maintainability)](https://codeclimate.com/github/210danila/php-project-57/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/f3b63cc7aa1af7e4e153/test_coverage)](https://codeclimate.com/github/210danila/php-project-57/test_coverage)
 
 ### 4ый проект хекслет менеджер задач
 

@@ -24,7 +24,7 @@ class LabelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:labels',
+            'name' => 'required|max:255|unique:labels',
             'description' => 'nullable'
         ];
     }
@@ -39,6 +39,7 @@ class LabelRequest extends FormRequest
         return [
             'name.required' => __('Это обязательное поле'),
             'name.unique' => __('Метка с таким именем уже существует'),
+            'name.max' => __('Длина имени метки не должна превышать 255 символов'),
         ];
     }
 }

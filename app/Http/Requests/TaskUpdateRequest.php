@@ -23,11 +23,8 @@ class TaskUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (!isset($this->route('task')->id)) {
-            return [];
-        }
         return [
-            'name' => 'required|max:255|unique:tasks,name,' . $this->route('task')->id,
+            'name' => 'required|max:255|unique:tasks,name,' . $this->route('task')?->id,
             'description' => 'nullable',
             'status_id' => 'required|exists:task_statuses,id',
             'assigned_to_id' => 'nullable',
