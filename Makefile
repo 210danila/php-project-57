@@ -2,6 +2,7 @@ setup:
 	cp .env.example .env
 	composer install
 	php artisan key:generate
+	npm install
 	npm ci
 	npm run build
 
@@ -29,4 +30,4 @@ tests:
 	php artisan test
 
 test-coverage:
-	composer exec --verbose phpunit tests -- --coverage-clover storage/logs/clover.xml
+	php artisan test --coverage-clover build/logs/clover.xml
