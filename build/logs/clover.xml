@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689349131">
-  <project timestamp="1689349131">
+<coverage generated="1689351282">
+  <project timestamp="1689351282">
     <file name="/home/yogin/Documents/hexlet/projects/php-project-57/app/Console/Kernel.php">
       <class name="App\Console\Kernel" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="5" coveredelements="3"/>
