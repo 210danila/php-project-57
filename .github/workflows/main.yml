@@ -26,6 +26,12 @@ jobs:
       - name: Setup project
         run: make setup
 
+      - name: Run database migrations
+        run: php artisan migrate --force
+
+      - name: Run linter
+        run: make lint
+
       - name: Run test & publish code coverage
         uses: paambaati/codeclimate-action@v4.0.0
         env:
