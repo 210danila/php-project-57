@@ -25,7 +25,7 @@ class TaskUpdateRequest extends FormRequest
     {
         $task_id = $this->route('task.id');
         return [
-            'name' => is_string($task_id) ? 
+            'name' => is_string($task_id) ?
                 'required|max:255|unique:tasks,name,' . $task_id :
                 'required|max:255',
             'description' => 'nullable',
