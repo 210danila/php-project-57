@@ -8,6 +8,7 @@ use App\Http\Requests\{TaskStoreRequest, TaskUpdateRequest};
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Str;
 
 class TaskController extends Controller
 {
@@ -22,8 +23,12 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $filters = $request->query('filter');
-        $statuses = TaskStatus::pluck('name', 'id');
-        $users = User::pluck('name', 'id');
+        $statuses = TaskStatus::pluck('name', 'id')
+            ->map(fn($name) => Str::limit($name, 20))
+            ->all();
+        $users = User::pluck('name', 'id')
+            ->map(fn($name) => Str::limit($name, 30))
+            ->all();
 
         $tasks = QueryBuilder::for(Task::class)
             ->allowedFilters([

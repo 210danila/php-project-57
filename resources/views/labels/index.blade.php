@@ -29,7 +29,7 @@
             @foreach ($labels as $label)
                 <tr class="border-b border-dashed text-left">
                     <td>{{ $label->id }}</td>
-                    <td>{{ $label->name }}</td>
+                    <td>{{ Str::limit($label->name, 50) }}</td>
                     <td>{{ $label->description }}</td>
                     <td>{{ $label->created_at->format('d.m.Y') }}</td>
                     <td>

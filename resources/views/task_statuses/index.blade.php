@@ -27,7 +27,7 @@
             @foreach ($statuses as $task_status)
                 <tr class="border-b border-dashed text-left">
                     <td>{{ $task_status->id }}</td>
-                    <td>{{ $task_status->name }}</td>
+                    <td>{{ Str::limit($task_status->name, 50) }}</td>
                     <td>{{ $task_status->created_at->format('d.m.Y') }}</td>
                     <td>
                         @can('delete', 'App\Models\TaskStatus')
